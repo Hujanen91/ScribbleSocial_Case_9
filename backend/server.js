@@ -4,6 +4,9 @@
 
 // en minimal express server applikation
 import express from 'express';
+// http är en inbyggd dependencie, det behöver alltså inte installeras innan vi importerar 
+import http from 'http';
+import ws from 'ws';
 
 // miljövariabler / inställningar
 // ------------------------------------------------------
