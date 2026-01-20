@@ -52,6 +52,7 @@ server.on("upgrade", (req, socket, head) => {
         // kommunikation on, skicka vidare event med 'emit'
         // använd händelselyssnare senare i koden
         wss.emit("connection", ws, req);
+        
     });
 });
 

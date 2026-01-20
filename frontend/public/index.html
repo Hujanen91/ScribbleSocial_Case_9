@@ -13,12 +13,17 @@
 
     <h1>ScribbleSocial</h1>
 
-    <!-- Input text -->
-    <form action="">
+    <!-- formulär som anger vem man är... -->
+    <form id="formUsername" action="">
+        <input type="text" name="username" id="username" placeholder="Username">
+        <input type="submit" value="Start talking!">
+    </form>
 
-        <input type="text" name="msg" id="msg" placeholder="Skriv något!">
-        <input type="submit" value="Skicka">
 
+    <!-- formulär för att skriva meddelande... -->
+    <form id="formMessage" action="">
+        <input type="text" name="msg" id="msg" placeholder="Say something!">
+        <input type="submit" value="Send">
     </form>
 
     <div id="chat">

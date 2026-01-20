@@ -46,9 +46,20 @@ websocket.addEventListener("message", (e) => {
     const obj = JSON.parse(e.data);
     console.log("obj", obj);
 
+    renderChatMessage(obj);
 
 });
 
 
 // funktioner
 // ------------------------------------------------------
+
+function renderChatMessage(obj) {
+
+    const p = document.createElement("p");
+    p.textContent = obj.msg;
+
+    chatElement.appendChild(p);
+
+}
+
