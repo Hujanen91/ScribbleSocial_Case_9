@@ -1,6 +1,9 @@
 // DOM element
 // ------------------------------------------------------
-const form = document.querySelector("form");
+const formMessage = document.querySelector("#formMessage");
+const formUsername = document.querySelector("#formUsername");
+const userElement = document.querySelector("input#username");
+const chatSection = document.getElementById("chatStage");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
 
@@ -13,10 +16,23 @@ const websocket = new WebSocket("ws://localhost:8555");
 // variabler, inställningar
 // ------------------------------------------------------
 
+let username;
 
 // händelselyssnare
 // ------------------------------------------------------
-form.addEventListener("submit", (e) => {
+formUsername.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    username = userElement.value;
+
+    userElement.setAttribute("disabled", true);
+
+    chatSection.classList.remove("hidden");
+    
+})
+
+
+formMessage.addEventListener("submit", (e) => {
     e.preventDefault();
 
     console.log("och nu då...");
@@ -24,9 +40,10 @@ form.addEventListener("submit", (e) => {
     // skicka ett meddelande via websocket
     const msg = msgElement.value;
 
-    const obj = {msg: msg};
+    const obj = {msg: msg, username: username};
 
     websocket.send(JSON.stringify(obj));
+
 })
 
 // aktivera lyssnare på input#msg: kan användas för att visa att ngn skriver tex "...is typing"
@@ -53,6 +70,7 @@ websocket.addEventListener("message", (e) => {
 
 // funktioner
 // ------------------------------------------------------
+
 
 function renderChatMessage(obj) {
 
