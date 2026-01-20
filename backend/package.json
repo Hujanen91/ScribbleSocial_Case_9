@@ -1,0 +1,26 @@
+{
+  "name": "case_9_websocket_canvas",
+  "version": "1.0.0",
+  "description": "Case 9 Websocket Canvas - Glimåkra",
+  "homepage": "https://github.com/Hujanen91/ScribbleSocial_Case_9#readme",
+  "bugs": {
+    "url": "https://github.com/Hujanen91/ScribbleSocial_Case_9/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hujanen91/ScribbleSocial_Case_9.git"
+  },
+  "license": "ISC",
+  "author": "Jennifer",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11",
+    "ws": "^8.19.0"
+  }
+}

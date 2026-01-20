@@ -1,12 +1,13 @@
 // dependencies
 // ------------------------------------------------------
-
-
 // en minimal express server applikation
-import express from 'express';
 // http är en inbyggd dependencie, det behöver alltså inte installeras innan vi importerar 
+import express from 'express';
 import http from 'http';
 import {WebSocketServer} from 'ws';
+
+
+
 
 // miljövariabler / inställningar
 // ------------------------------------------------------
