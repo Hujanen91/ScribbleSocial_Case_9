@@ -5,16 +5,27 @@
 import express from 'express';
 import http from 'http';
 import {WebSocketServer} from 'ws';
+// ------------------------------------------------------
+// en korrigering för path, ett robust sätt att se till att våran server.js använder en 
+// absolut sökväg. Vi meddelar node exakt vart filerna finns oavsett vart vi startar servern från
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 
-
+// hämta url från den aktuella filen (server.js)
+const __filename = fileURLToPath(import.meta.url);
+// extrahera dir-name från url-en vi precis hämtade ovan
+const __dirname = path.dirname(__filename);
 
 // miljövariabler / inställningar
 // ------------------------------------------------------
 const app = express();
 
 // enge en mapp som express kan använda för att skicka filer automatiskt utan routes
-app.use(express.static('frontend/public'))
+// app.use(express.static('../frontend/public'))
+
+// kombinera "join" hämtning och extrahering av url och dir-name:
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 // definera/ange våran port
 const port = 8555;
