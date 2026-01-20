@@ -12,7 +12,6 @@ const chatElement = document.querySelector("div#chat");
 const websocket = new WebSocket("ws://localhost:8555");
 
 
-
 // variabler, inställningar
 // ------------------------------------------------------
 
@@ -21,12 +20,10 @@ let username;
 // händelselyssnare
 // ------------------------------------------------------
 formUsername.addEventListener("submit", (e) => {
+
     e.preventDefault();
-
     username = userElement.value;
-
     userElement.setAttribute("disabled", true);
-
     chatSection.classList.remove("hidden");
     
 })
@@ -39,9 +36,13 @@ formMessage.addEventListener("submit", (e) => {
 
     // skicka ett meddelande via websocket
     const msg = msgElement.value;
-
     const obj = {msg: msg, username: username};
 
+    // Skriver man själv ett meddelande i chatten bör det render direkt
+    // för den som är inloggad
+    renderChatMessage(obj);
+
+    // för att andra ska se ett nytt meddelande skickas det via websockets
     websocket.send(JSON.stringify(obj));
 
 })
@@ -76,8 +77,14 @@ function renderChatMessage(obj) {
 
     const p = document.createElement("p");
     p.textContent = obj.msg;
-
     chatElement.appendChild(p);
+
+    // applicera klass på vem som skriver - jfr username === obj.username
+    
+    
+
+
+
 
 }
 

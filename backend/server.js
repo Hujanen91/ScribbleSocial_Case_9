@@ -52,7 +52,7 @@ server.on("upgrade", (req, socket, head) => {
         // kommunikation on, skicka vidare event med 'emit'
         // använd händelselyssnare senare i koden
         wss.emit("connection", ws, req);
-        
+
     });
 });
 
@@ -91,11 +91,10 @@ wss.on('connection', (ws) => {
 
         console.log(obj);
 
-        wss.clients.forEach(client => {
-            client.send(JSON.stringify(obj))
-        })
+        // broadcast(wss. obj);
+        broadcastExclude(wss, ws, obj);
+    });
 
-    })
 
 });
 
@@ -105,3 +104,25 @@ wss.on('connection', (ws) => {
 server.listen(port, () => {
     console.log(`Server running on port ${port}`)
 })
+
+
+// Hjälpfunktioner för att skicka websocket till alla, eller till vissa
+/**
+ * 
+ * @param {WebSocketServer} wss 
+ * @param {object} obj 
+ */
+function broadcast(wss, obj) {
+    wss.clients.forEach(client => {
+            client.send(JSON.stringify(obj))
+        });
+}
+
+// funktion som exkluderar en client
+function broadcastExclude(wss, ws, obj) {
+    wss.clients.forEach(client => {
+        if (client !== ws) {
+            client.send(JSON.stringify(obj));
+        }
+    });
+}
