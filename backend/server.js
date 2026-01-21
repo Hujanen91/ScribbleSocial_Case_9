@@ -4,7 +4,7 @@
 // http är en inbyggd dependencie, det behöver alltså inte installeras innan vi importerar 
 import express from 'express';
 import http from 'http';
-import {WebSocketServer} from 'ws';
+import { WebSocketServer } from 'ws';
 // ------------------------------------------------------
 // en korrigering för path, ett robust sätt att se till att våran server.js använder en 
 // absolut sökväg. Vi meddelar node exakt vart filerna finns oavsett vart vi startar servern från
@@ -34,11 +34,11 @@ const port = 8555;
 const server = http.createServer(app);
 
 // skapa en websocket server
-const wss = new WebSocketServer({noServer: true});
+const wss = new WebSocketServer({ noServer: true });
 
 // handskaningen - godkänn kommunikation via websocket
 server.on("upgrade", (req, socket, head) => {
-    
+
     console.log("event upgrade...")
 
     // bestäm vem som får kommunicera med websocket
@@ -46,7 +46,7 @@ server.on("upgrade", (req, socket, head) => {
     // if (!authenticated) return
 
     wss.handleUpgrade(req, socket, head, (ws) => {
-        
+
         console.log("Client:", req.headers['user-agent']);
 
         // kommunikation on, skicka vidare event med 'emit'
@@ -55,6 +55,13 @@ server.on("upgrade", (req, socket, head) => {
 
     });
 });
+
+
+let users = ["Knatte", "Fnatte", "Tjatte"];
+
+// array för aktiva användarnamnet
+let usersOnline = [];
+
 
 // middleware
 // ------------------------------------------------------
@@ -65,21 +72,41 @@ app.use(express.json());
 // routes
 // ------------------------------------------------------
 app.post('/login', (req, res) => {
-    console.log("A post request...")
-})
+    console.log("A post request...", req.body);
+
+    let username = req.body.username;
+    console.log("username", username);
+
+    if (users.includes(username)) {
+        console.log("User is available");
+
+        // se till att aktuellt username tas bort från users
+        // ev kolla så att ett namn matchar även om man ex glömmer inledande versal
+
+        users = users.filter((u) => u != username);
+
+        console.log("Users left:", users);
+
+        // skicka ett objekt:
+        res.send({ authenticated: true, username: username });
+    } else {
+        res.send({ authenticated: false });
+    }
+
+});
 
 
 // lyssna på event
 // ------------------------------------------------------
 wss.on('connection', (ws) => {
-    
+
     // info om klienter som autentiseras - websocket kommunikation ok
     console.log(`New user connected, users online: ${wss.clients.size}`);
 
     // skicka meddelande till browser-land
     // skicka och ta emot data, förusätt att det är i JSON-format
 
-    const obj = {msg: "New user has connected"};
+    const obj = { msg: "New user has connected" };
 
     ws.send(JSON.stringify(obj));
 
@@ -119,8 +146,8 @@ server.listen(port, () => {
  */
 function broadcast(wss, obj) {
     wss.clients.forEach(client => {
-            client.send(JSON.stringify(obj))
-        });
+        client.send(JSON.stringify(obj))
+    });
 }
 
 // funktion som exkluderar en client

@@ -6,6 +6,8 @@ const userElement = document.querySelector("input#username");
 const chatSection = document.getElementById("chatStage");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
+const listDisplay = document.getElementById("userList");
+const alertDisplay = document.getElementById("alertDisplay");
 
 
 // dependencies - WebSocket
@@ -16,6 +18,7 @@ const websocket = new WebSocket("ws://localhost:8555");
 // ------------------------------------------------------
 
 let username;
+// const currentUsers = [];
 
 // händelselyssnare
 // ------------------------------------------------------
@@ -23,10 +26,16 @@ formUsername.addEventListener("submit", (e) => {
 
     e.preventDefault();
 
+    username = userElement.value;
+
     const endpoint = "http://localhost:8555/login";
 
     const options = {
-        method: "POST"
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: username })
     };
 
     fetch(endpoint, options)
@@ -36,11 +45,11 @@ formUsername.addEventListener("submit", (e) => {
         })
 
 
-    username = userElement.value;
-    userElement.setAttribute("disabled", true);
-    chatSection.classList.remove("hidden");
+    // userElement.setAttribute("disabled", true);
+    // chatSection.classList.remove("hidden");
 
 })
+
 
 
 formMessage.addEventListener("submit", (e) => {
