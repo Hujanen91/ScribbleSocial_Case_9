@@ -22,10 +22,24 @@ let username;
 formUsername.addEventListener("submit", (e) => {
 
     e.preventDefault();
+
+    const endpoint = "http://localhost:8555/login";
+
+    const options = {
+        method: "POST"
+    };
+
+    fetch(endpoint, options)
+        .then(res => res.text())
+        .then((data) => {
+            console.log("data", data);
+        })
+
+
     username = userElement.value;
     userElement.setAttribute("disabled", true);
     chatSection.classList.remove("hidden");
-    
+
 })
 
 
@@ -36,7 +50,7 @@ formMessage.addEventListener("submit", (e) => {
 
     // skicka ett meddelande via websocket
     const msg = msgElement.value;
-    const obj = {msg: msg, username: username};
+    const obj = { msg: msg, username: username };
 
     // Skriver man själv ett meddelande i chatten bör det render direkt
     // för den som är inloggad
@@ -80,8 +94,8 @@ function renderChatMessage(obj) {
     chatElement.appendChild(p);
 
     // applicera klass på vem som skriver - jfr username === obj.username
-    
-    
+
+
 
 
 

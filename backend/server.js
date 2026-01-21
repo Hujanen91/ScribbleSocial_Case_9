@@ -58,10 +58,15 @@ server.on("upgrade", (req, socket, head) => {
 
 // middleware
 // ------------------------------------------------------
+app.use(express.json());
+
 
 
 // routes
 // ------------------------------------------------------
+app.post('/login', (req, res) => {
+    console.log("A post request...")
+})
 
 
 // lyssna på event
@@ -69,19 +74,19 @@ server.on("upgrade", (req, socket, head) => {
 wss.on('connection', (ws) => {
     
     // info om klienter som autentiseras - websocket kommunikation ok
-    console.log(`Klient ansluten, antal klienter: ${wss.clients.size}`);
+    console.log(`New user connected, users online: ${wss.clients.size}`);
 
     // skicka meddelande till browser-land
     // skicka och ta emot data, förusätt att det är i JSON-format
 
-    const obj = {msg: "Ny klient ansluten :)"};
+    const obj = {msg: "New user has connected"};
 
     ws.send(JSON.stringify(obj));
 
     // lyssna på event när en klient lämnar kommunikationen
     ws.on('close', () => {
 
-        console.log(`Klient lämnade, antal klienter kvar: ${wss.clients.size}`);
+        console.log(`User left, users online: ${wss.clients.size}`);
     });
 
     // lyssna på event av sorten "message"
