@@ -39,29 +39,36 @@ formUsername.addEventListener("submit", (e) => {
     };
 
     fetch(endpoint, options)
-        .then(res => res.text())
+        .then(res => res.json())
         .then((data) => {
 
             console.log("data", data);
-            userElement.setAttribute("disabled", true);
-            chatSection.classList.remove("hidden");
-        })
+
+            if (data.authenticated === true) {
+                authenticated = true;
+
+                userElement.setAttribute("disabled", true);
+                chatSection.classList.remove("hidden");
+            } else {
+
+                // ge meddelande till klient: autentisering ej ok
 
 
-
-
-})
+            }
+        });
+});
 
 
 
 formMessage.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    console.log("och nu då...");
+    // endast autentiserade ska kunna chatta
+
 
     // skicka ett meddelande via websocket
     const msg = msgElement.value;
-    const obj = { msg: msg, username: username };
+    const obj = { type: "text", msg: msg, username: username };
 
     // Skriver man själv ett meddelande i chatten bör det render direkt
     // för den som är inloggad
@@ -71,6 +78,7 @@ formMessage.addEventListener("submit", (e) => {
     websocket.send(JSON.stringify(obj));
 
 })
+
 
 // aktivera lyssnare på input#msg: kan användas för att visa att ngn skriver tex "...is typing"
 msgElement.addEventListener("keydown", (e) => {
@@ -89,26 +97,42 @@ websocket.addEventListener("message", (e) => {
     const obj = JSON.parse(e.data);
     console.log("obj", obj);
 
-    renderChatMessage(obj);
+    switch (obj.type) {
+        case "text":
+            renderChatMessage(obj);
+            break;
+
+    }
+
 
 });
 
 
 // funktioner
 // ------------------------------------------------------
-
-
+/**
+ * 
+ * @param {Object} obj 
+ * @param {string} obj.username
+ * @param {string} obj.msg 
+ */
 function renderChatMessage(obj) {
 
+    let div = document.createElement("div");
     const p = document.createElement("p");
-    p.textContent = obj.msg;
-    chatElement.appendChild(p);
 
     // applicera klass på vem som skriver - jfr username === obj.username
 
+    if (obj.username !== username) {
+        div.classList = "textMessage other";
+    } else {
+        div.classList = "textMessage";
+    }
+
+    p.textContent = obj.msg;
 
 
-
+    chatElement.appendChild(p);
 
 
 }

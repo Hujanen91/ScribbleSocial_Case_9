@@ -10,3 +10,13 @@ section#chatStage {
 .hidden {
     display: none;
 }
+
+#chat .textMsg {
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#chat .other {
+    text-align: right;
+}
+

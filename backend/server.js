@@ -23,7 +23,6 @@ const app = express();
 
 // enge en mapp som express kan använda för att skicka filer automatiskt utan routes
 // app.use(express.static('../frontend/public'))
-
 // kombinera "join" hämtning och extrahering av url och dir-name:
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 
@@ -117,19 +116,27 @@ wss.on('connection', (ws) => {
     // lyssna på event när en klient lämnar kommunikationen
     ws.on('close', () => {
 
-        
         console.log(`User left, users online: ${wss.clients.size}`);
     });
+
 
     // lyssna på event av sorten "message"
     ws.on('message', (data) => {
 
         const obj = JSON.parse(data);
-
         console.log(obj);
 
-        // broadcast(wss. obj);
-        broadcastExclude(wss, ws, obj);
+        // ev om behov finns, kontrollera obj.type för att avgöra hur
+        // servern hanterar inkommande meddelande
+
+        switch(obj.type) {
+
+            case "text":
+                // broadcast(wss. obj);
+                broadcastExclude(wss, ws, obj);
+            break;
+
+        }
     });
 
 
@@ -155,7 +162,13 @@ function broadcast(wss, obj) {
     });
 }
 
-// funktion som exkluderar en client
+// funktion som skickar till alla via websocket utom aktuell klient
+/**
+ * 
+ * @param {WebSocketServer} wss 
+ * @param {WebSocket} ws 
+ * @param {object} obj 
+ */
 function broadcastExclude(wss, ws, obj) {
     wss.clients.forEach(client => {
         if (client !== ws) {
