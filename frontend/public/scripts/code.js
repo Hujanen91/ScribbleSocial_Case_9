@@ -41,12 +41,14 @@ formUsername.addEventListener("submit", (e) => {
     fetch(endpoint, options)
         .then(res => res.text())
         .then((data) => {
+
             console.log("data", data);
+            userElement.setAttribute("disabled", true);
+            chatSection.classList.remove("hidden");
         })
 
 
-    // userElement.setAttribute("disabled", true);
-    // chatSection.classList.remove("hidden");
+
 
 })
 

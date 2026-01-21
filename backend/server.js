@@ -59,6 +59,7 @@ server.on("upgrade", (req, socket, head) => {
 
 let users = ["Knatte", "Fnatte", "Tjatte"];
 
+
 // array för aktiva användarnamnet
 let usersOnline = [];
 
@@ -89,6 +90,9 @@ app.post('/login', (req, res) => {
 
         // skicka ett objekt:
         res.send({ authenticated: true, username: username });
+
+        usersOnline.push(username);
+
     } else {
         res.send({ authenticated: false });
     }
@@ -106,13 +110,14 @@ wss.on('connection', (ws) => {
     // skicka meddelande till browser-land
     // skicka och ta emot data, förusätt att det är i JSON-format
 
-    const obj = { msg: "New user has connected" };
+    const obj = { msg: "New user has connected", usersOnline: usersOnline };
 
     ws.send(JSON.stringify(obj));
 
     // lyssna på event när en klient lämnar kommunikationen
     ws.on('close', () => {
 
+        
         console.log(`User left, users online: ${wss.clients.size}`);
     });
 
