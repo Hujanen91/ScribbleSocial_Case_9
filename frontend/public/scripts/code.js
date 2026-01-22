@@ -6,9 +6,8 @@ const userElement = document.querySelector("input#username");
 const chatSection = document.getElementById("chatStage");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
-const listDisplay = document.getElementById("userList");
+const onlineUsersList = document.getElementById("onlineUsers");
 const alertDisplay = document.getElementById("alertDisplay");
-
 
 // dependencies - WebSocket
 const websocket = new WebSocket("ws://localhost:8555");
@@ -20,6 +19,8 @@ const websocket = new WebSocket("ws://localhost:8555");
 let username;
 let authenticated = false;
 // const currentUsers = [];
+
+
 
 // händelselyssnare
 // ------------------------------------------------------
@@ -56,6 +57,10 @@ formUsername.addEventListener("submit", (e) => {
 
                 // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
                 msgElement.focus();
+
+                // meddela via websockets att en användare har autentiserats
+                const obj = { type: "new_user", username: username };
+                websocket.send(JSON.stringify(obj));
 
             } else {
                 console.log("Username already in use");
@@ -118,7 +123,7 @@ websocket.addEventListener("message", (e) => {
             console.log("uppdatera ngt på klientsidan", obj.usersOnline)
         break;
         case "new_user":
-            
+            console.log("uppdatera att följande användare är på plats...", obj.username)
         break;
 
     }

@@ -90,7 +90,12 @@ app.post('/login', (req, res) => {
         // skicka ett objekt:
         res.send({ authenticated: true, username: username });
 
-        usersOnline.push(username);
+        // uppdatera listan med usersonline
+        // usersOnline.push(username);
+
+        // för att användaren som verifierats ska kopplas till en websocketklient
+        // avvakta med att uppdatera usersOnline tills dess att websocket är klar...
+
 
     } else {
         res.send({ authenticated: false });
@@ -137,6 +142,21 @@ wss.on('connection', (ws) => {
             case "text":
                 // broadcast(wss. obj);
                 broadcastExclude(wss, ws, obj);
+            break;
+
+            case "new_user":
+
+                // uppdatera listan usersOnline med användaren
+                usersOnline.push(obj.username);
+                obj.usersOnline = usersOnline;
+
+                // här kan man ex lägga till extra egenskaper i objektet
+                // if (!obj.hasOwnProperty("usersOnline")) {
+                //     obj.usersOnline = usersOnline;
+                // }
+
+                // broadcastExclude(wss, ws, obj);
+                broadcast(wss, obj);
             break;
 
         }
