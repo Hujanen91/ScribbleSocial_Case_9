@@ -18,6 +18,7 @@ const websocket = new WebSocket("ws://localhost:8555");
 // ------------------------------------------------------
 
 let username;
+let authenticated = false;
 // const currentUsers = [];
 
 // händelselyssnare
@@ -46,11 +47,18 @@ formUsername.addEventListener("submit", (e) => {
 
             if (data.authenticated === true) {
                 authenticated = true;
+                username = data.username;
+
+                console.log("authenticated", authenticated, "username", username);
 
                 userElement.setAttribute("disabled", true);
                 chatSection.classList.remove("hidden");
-            } else {
 
+                // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
+                msgElement.focus();
+                
+            } else {
+                console.log("Username already in use");
                 // ge meddelande till klient: autentisering ej ok
 
 
@@ -76,6 +84,11 @@ formMessage.addEventListener("submit", (e) => {
 
     // för att andra ska se ett nytt meddelande skickas det via websockets
     websocket.send(JSON.stringify(obj));
+
+    // ta bort texten från elementet för att man inte ska kunna spamma samma meddelanden
+    msgElement.value = "";
+    // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
+    msgElement.focus();
 
 })
 
@@ -132,11 +145,16 @@ function renderChatMessage(obj) {
 
     p.textContent = obj.msg;
 
+    // användarnamn
+    let divUsername = document.createElement("div");
+    divUsername.textContent = obj.username;
+    divUsername.classList = "username";
+
+    div.appendChild(divUsername);
     div.appendChild(p);
 
     chatElement.appendChild(div);
     // chatElement.appendChild(p);
-
 
 }
 

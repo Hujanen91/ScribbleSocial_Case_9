@@ -12,27 +12,35 @@ section#chatStage {
 }
 
 #chat .textMsg {
-    display: flex;
+    display: grid;
     justify-self: start;
     justify-content: start;
+    align-self: right;
     text-align: left;
-    width: 50%;
+    width: 45%;
     padding: 5px;
     margin: 5px;
     border: 1px solid black;
     border-radius: 5px;
 }
 
-#chat .other {
-    display: flex;
+#chat .other{
+    display: grid;
     justify-self: end;
     justify-content: end;
+    align-self: left;
     text-align: right;
-    width: 50%;
+    width: 45%;
     padding: 5px;
     margin: 5px;
     border: 1px solid black;
     border-radius: 5px;
     
 }
+
+/* .username {
+    padding-bottom: 2px;
+    text-align: inherit;
+    width: 50%;
+} */
 
