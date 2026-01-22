@@ -120,19 +120,22 @@ function renderChatMessage(obj) {
 
     let div = document.createElement("div");
     const p = document.createElement("p");
+    div.classList = "textMsg";
 
     // applicera klass på vem som skriver - jfr username === obj.username
 
     if (obj.username !== username) {
-        div.classList = "textMessage other";
+        div.classList = "textMsg";
     } else {
-        div.classList = "textMessage";
+        div.classList.add("other");
     }
 
     p.textContent = obj.msg;
 
+    div.appendChild(p);
 
-    chatElement.appendChild(p);
+    chatElement.appendChild(div);
+    // chatElement.appendChild(p);
 
 
 }
