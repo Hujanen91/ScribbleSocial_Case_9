@@ -56,7 +56,7 @@ formUsername.addEventListener("submit", (e) => {
 
                 // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
                 msgElement.focus();
-                
+
             } else {
                 console.log("Username already in use");
                 // ge meddelande till klient: autentisering ej ok
@@ -113,7 +113,13 @@ websocket.addEventListener("message", (e) => {
     switch (obj.type) {
         case "text":
             renderChatMessage(obj);
-            break;
+        break;
+        case "new_client":
+            console.log("uppdatera ngt på klientsidan", obj.usersOnline)
+        break;
+        case "new_user":
+            
+        break;
 
     }
 

@@ -109,14 +109,17 @@ wss.on('connection', (ws) => {
     // skicka meddelande till browser-land
     // skicka och ta emot data, förusätt att det är i JSON-format
 
-    const obj = { msg: "New user has connected", usersOnline: usersOnline };
-
-    ws.send(JSON.stringify(obj));
+    // skicka meddelande till samtliga klienter om att en ny användare finns samt alla aktiva användare
+    const obj = { type: "new_client", msg: "New user has connected", usersOnline: usersOnline };
+    broadcast(wss, obj);
 
     // lyssna på event när en klient lämnar kommunikationen
     ws.on('close', () => {
-
+        // skicka aktuell lista på aktiva användare till klienterna
         console.log(`User left, users online: ${wss.clients.size}`);
+
+        // ev skicka info till klienter om att en klient inte längre är med...
+
     });
 
 
