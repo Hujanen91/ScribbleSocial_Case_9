@@ -6,7 +6,7 @@ const userElement = document.querySelector("input#username");
 const chatSection = document.getElementById("chatStage");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
-const onlineUsersList = document.getElementById("onlineUsers");
+const onlineUsersElement = document.getElementById("onlineUsers");
 const alertDisplay = document.getElementById("alertDisplay");
 
 // dependencies - WebSocket
@@ -118,13 +118,21 @@ websocket.addEventListener("message", (e) => {
     switch (obj.type) {
         case "text":
             renderChatMessage(obj);
-        break;
+            break;
         case "new_client":
             console.log("uppdatera ngt på klientsidan", obj.usersOnline)
-        break;
+            break;
         case "new_user":
             console.log("uppdatera att följande användare är på plats...", obj.username)
-        break;
+
+            // visa en uppdaterad lista på aktuella användare som servern anser vara online
+            onlineUsersElement.textContent = obj.usersOnline;
+            // onlineUsersElement.innerHTML = obj.usersOnline.map(u => `<span>${u}</span>`)
+            break;
+
+        case "user_left":
+            onlineUsersElement.textContent = obj.usersOnline;
+            break;
 
     }
 

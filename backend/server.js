@@ -118,12 +118,31 @@ wss.on('connection', (ws) => {
     const obj = { type: "new_client", msg: "New user has connected", usersOnline: usersOnline };
     broadcast(wss, obj);
 
+    ws.username
+
     // lyssna på event när en klient lämnar kommunikationen
     ws.on('close', () => {
         // skicka aktuell lista på aktiva användare till klienterna
         console.log(`User left, users online: ${wss.clients.size}`);
 
         // ev skicka info till klienter om att en klient inte längre är med...
+        
+        // Uppdatera listan usersOnline så att vi vet att en specifik användare är kopplad
+        // till just den här klienten, dvs "ws"
+        // ta bort accosierad användare
+        // ws.username vs array usersOnline
+        console.log(ws.username, "vs", usersOnline);
+
+
+
+        // skicka websocketmeddelande om vem som droppade, samt uppdatera på aktuella
+        // användare
+
+        // ta bort ett element från en array
+        usersOnline = usersOnline.filter(u => u !== ws.username);
+        const obj = {type: "user_left", username: ws.username, usersOnline: usersOnline};
+
+        broadcastExclude(wss, ws, obj);
 
     });
 
@@ -149,6 +168,11 @@ wss.on('connection', (ws) => {
                 // uppdatera listan usersOnline med användaren
                 usersOnline.push(obj.username);
                 obj.usersOnline = usersOnline;
+
+                // en variant som funkar i js
+                // lägg till en egenskap till det objekt som nu har koll på klientkopplingen
+                // inte best practise, se över andra lösningar senare
+                ws.username = obj.username;
 
                 // här kan man ex lägga till extra egenskaper i objektet
                 // if (!obj.hasOwnProperty("usersOnline")) {
