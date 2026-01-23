@@ -83,6 +83,10 @@ formMessage.addEventListener("submit", (e) => {
     const msg = msgElement.value;
     const obj = { type: "text", msg: msg, username: username };
 
+    // aktuell tid
+    const date = new Date();
+    obj.date = date;
+
     // Skriver man själv ett meddelande i chatten bör det render direkt
     // för den som är inloggad
     renderChatMessage(obj);
@@ -116,12 +120,15 @@ websocket.addEventListener("message", (e) => {
     console.log("obj", obj);
 
     switch (obj.type) {
+
         case "text":
             renderChatMessage(obj);
             break;
+
         case "new_client":
             console.log("uppdatera ngt på klientsidan", obj.usersOnline)
             break;
+
         case "new_user":
             console.log("uppdatera att följande användare är på plats...", obj.username)
 
@@ -146,8 +153,10 @@ websocket.addEventListener("message", (e) => {
  * 
  * @param {Object} obj 
  * @param {string} obj.username
- * @param {string} obj.msg 
+ * @param {string} obj.msg
+ * @param {Date} obj.date - Date 
  */
+
 function renderChatMessage(obj) {
 
     let div = document.createElement("div");
@@ -163,6 +172,7 @@ function renderChatMessage(obj) {
     }
 
     p.textContent = obj.msg;
+    p.classList = "text";
 
     // användarnamn
     let divUsername = document.createElement("div");
@@ -171,6 +181,21 @@ function renderChatMessage(obj) {
 
     div.appendChild(divUsername);
     div.appendChild(p);
+
+    // aktuell tid
+    const time = document.createElement("time");
+
+    // vad har obj.date för datatyo
+    console.log("Datatyp:", typeof obj.date);
+
+    // datumobjekt för att kunna välja ut en viss del
+    const date = new Date(obj.date);
+
+    // visa tid som hh:mm:ss
+    time.textContent = date.toLocaleTimeString();
+    time.dateTime = date.toLocaleTimeString();
+    div.appendChild(time);
+
 
     chatElement.appendChild(div);
     // chatElement.appendChild(p);

@@ -160,6 +160,13 @@ wss.on('connection', (ws) => {
 
             case "text":
                 // broadcast(wss. obj);
+                // för att visa aktuell tid för ett textmeddelande kan man
+                // lägga till egenskapen på serversidan
+                // då kan tidszoner implementeras om clienter skriver från olika delar i världen
+                const date = new Date();
+
+                obj.date = date;
+
                 broadcastExclude(wss, ws, obj);
             break;
 
