@@ -44,3 +44,11 @@ section#chatStage {
     width: 50%;
 } */
 
+canvas {
+    width: 300px;
+    height: 200px;
+    border: 1px solid rgb(183, 183, 183);
+    border-radius: 10px;
+    border-width: 3px;
+    border-style: inset;
+}

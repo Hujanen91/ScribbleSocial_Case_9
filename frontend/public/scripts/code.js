@@ -8,9 +8,17 @@ const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
 const onlineUsersElement = document.getElementById("onlineUsers");
 const alertDisplay = document.getElementById("alertDisplay");
+const canvas = document.querySelector("canvas");
+
+
+// rita 2d i canvas elementet
+const ctx = canvas.getContext("2d");
+
+
 
 // dependencies - WebSocket
 const websocket = new WebSocket("ws://localhost:8555");
+
 
 
 // variabler, inställningar
@@ -20,6 +28,14 @@ let username;
 let authenticated = false;
 // const currentUsers = [];
 
+
+// testa rita i canvas elementet
+// ------------------------------------------------------
+// beskriv en cirkelbåge
+// ctx.arc(canvas.width / 2, canvas.height / 2, 10, 0, Math.PI * 2, true);
+
+// rita
+ctx.fill();
 
 
 // händelselyssnare
@@ -145,6 +161,22 @@ websocket.addEventListener("message", (e) => {
 
 
 });
+
+
+canvas.addEventListener("click", (e) => {
+
+    // kordinater
+    const point = {x: e.offsetX, y: e.offsetY};
+
+    // rita cirkel
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 20, 0, Math.PI * 2, true);
+    ctx.fillStyle = "yellow"
+    ctx.fill();
+    ctx.closePath();
+
+    console.log(point);
+})
 
 
 // funktioner
