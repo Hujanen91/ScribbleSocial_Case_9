@@ -26,6 +26,8 @@ const websocket = new WebSocket("ws://localhost:8555");
 
 let username;
 let authenticated = false;
+let isDrawing = false;
+let points = [];
 // const currentUsers = [];
 
 
@@ -163,20 +165,52 @@ websocket.addEventListener("message", (e) => {
 });
 
 
-canvas.addEventListener("click", (e) => {
-
+canvas.addEventListener("dblclick", (e) => {
     // kordinater
     const point = {x: e.offsetX, y: e.offsetY};
+    const radius = Math.ceil(Math.random() * 40);
+    drawCircle(point, radius);
+});
 
-    // rita cirkel
+
+
+// lägg till händelselyssnare för att kunna rita i ett canvas-element
+canvas.addEventListener("mousedown", (e) => {
+    const point = {x: e.offsetX, y: e.offsetY};
+    console.log("mousedown");
+    isDrawing = true;
+
     ctx.beginPath();
-    ctx.arc(point.x, point.y, 20, 0, Math.PI * 2, true);
-    ctx.fillStyle = "yellow"
-    ctx.fill();
+    ctx.moveTo(point.x, point.y);
+
+    // buffra koordinat (point)
+    points.push(point);
+})
+
+canvas.addEventListener("mouseup", (e) => {
+    console.log("mouseup");
+    isDrawing = false;
+
     ctx.closePath();
 
-    console.log(point);
+    // sänd buffrade koordinater via websocket
+    websocket.send(JSON.stringify({type: "draw", points: points}));
+
+    // ta bort alla tidigare koordinater
+    points = [];
 })
+
+canvas.addEventListener("mousemove", (e) => {
+    const point = {x: e.offsetX, y: e.offsetY};
+    console.log(point);
+    if (!isDrawing) { return };
+
+    ctx.lineTo(point.x, point.y);
+    ctx.stroke();
+
+    // buffra kordinater (points) och skicka klumpvis med ws
+    points.push(point);
+});
 
 
 // funktioner
@@ -234,3 +268,15 @@ function renderChatMessage(obj) {
 
 }
 
+/**
+ * 
+ * @param {Object} point 
+ * @param {Number} radius 
+ */
+function drawCircle(point, radius) {
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, radius, 0, Math.PI * 2, true);
+    ctx.fillStyle = "yellow"
+    ctx.fill();
+    ctx.closePath();
+}
