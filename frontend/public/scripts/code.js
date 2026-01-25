@@ -159,6 +159,12 @@ websocket.addEventListener("message", (e) => {
             onlineUsersElement.textContent = obj.usersOnline;
             break;
 
+        case "draw":
+
+            // anropa en funktion
+            drawLine(obj);
+
+        break;
     }
 
 
@@ -279,4 +285,20 @@ function drawCircle(point, radius) {
     ctx.fillStyle = "yellow"
     ctx.fill();
     ctx.closePath();
+}
+
+function drawLine(obj) {
+
+    const points = obj.points;
+    if (points && points.length > 0) {
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+
+        for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i].x, points[i].y);
+            ctx.stroke();
+        }
+
+        ctx.closePath();
+    }
 }

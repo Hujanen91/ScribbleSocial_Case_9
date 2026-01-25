@@ -126,7 +126,7 @@ wss.on('connection', (ws) => {
         console.log(`User left, users online: ${wss.clients.size}`);
 
         // ev skicka info till klienter om att en klient inte längre är med...
-        
+
         // Uppdatera listan usersOnline så att vi vet att en specifik användare är kopplad
         // till just den här klienten, dvs "ws"
         // ta bort accosierad användare
@@ -140,7 +140,7 @@ wss.on('connection', (ws) => {
 
         // ta bort ett element från en array
         usersOnline = usersOnline.filter(u => u !== ws.username);
-        const obj = {type: "user_left", username: ws.username, usersOnline: usersOnline};
+        const obj = { type: "user_left", username: ws.username, usersOnline: usersOnline };
 
         broadcastExclude(wss, ws, obj);
 
@@ -156,7 +156,7 @@ wss.on('connection', (ws) => {
         // ev om behov finns, kontrollera obj.type för att avgöra hur
         // servern hanterar inkommande meddelande
 
-        switch(obj.type) {
+        switch (obj.type) {
 
             case "text":
                 // broadcast(wss. obj);
@@ -168,7 +168,7 @@ wss.on('connection', (ws) => {
                 obj.date = date;
 
                 broadcastExclude(wss, ws, obj);
-            break;
+                break;
 
             case "new_user":
 
@@ -188,7 +188,13 @@ wss.on('connection', (ws) => {
 
                 // broadcastExclude(wss, ws, obj);
                 broadcast(wss, obj);
-            break;
+                break;
+
+            case "draw":
+
+                broadcastExclude(wss, ws, obj);
+
+                break;
 
         }
     });
@@ -204,7 +210,7 @@ server.listen(port, () => {
 })
 
 
-// Hjälpfunktioner för att skicka websocket till alla, eller till vissa
+// Hjälpfunktioner för att skicka websocket till alla (inklusive dig själv)
 /**
  * 
  * @param {WebSocketServer} wss 
