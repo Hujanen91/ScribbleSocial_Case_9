@@ -5,6 +5,7 @@
 import express from 'express';
 import http from 'http';
 import { WebSocketServer } from 'ws';
+import { nanoid } from 'nanoid';
 // ------------------------------------------------------
 // en korrigering för path, ett robust sätt att se till att våran server.js använder en 
 // absolut sökväg. Vi meddelar node exakt vart filerna finns oavsett vart vi startar servern från
@@ -88,7 +89,8 @@ app.post('/login', (req, res) => {
         console.log("Users left:", users);
 
         // skicka ett objekt:
-        res.send({ authenticated: true, username: username });
+        res.send({ authenticated: true, username: username, id: nanoid()});
+        
 
         // uppdatera listan med usersonline
         // usersOnline.push(username);

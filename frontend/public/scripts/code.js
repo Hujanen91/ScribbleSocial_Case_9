@@ -18,6 +18,9 @@ const ctx = canvas.getContext("2d");
 
 // dependencies - WebSocket
 const websocket = new WebSocket("ws://localhost:8555");
+import Player from "./Player.js";
+
+let player = new Player()
 
 
 
