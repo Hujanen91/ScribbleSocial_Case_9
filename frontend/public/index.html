@@ -12,17 +12,14 @@
 <body>
 
     <h1>ScribbleSocial</h1>
-
-    <p>
-        Usernames available:
-        <code>Knatte, Fnatte, Tjatte</code>
+    <canvas width="300" height="200"></canvas>
+    <p class="activeUsername">
+        Create a username:
     </p>
 
-    <canvas width="300" height="200"></canvas>
-    
     <!-- formulär som anger vem man är... -->
     <form id="formUsername" action="">
-        <input type="text" name="username" id="username" placeholder="Username">
+        <input type="text" name="username" id="username" placeholder="Username" required minlength="3" maxlength="10">
         <input type="submit" value="Start talking!">
     </form>
     <p id="alertDisplay"></p>

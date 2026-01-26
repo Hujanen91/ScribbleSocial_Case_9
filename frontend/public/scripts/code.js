@@ -9,6 +9,7 @@ const chatElement = document.querySelector("div#chat");
 const onlineUsersElement = document.getElementById("onlineUsers");
 const alertDisplay = document.getElementById("alertDisplay");
 const canvas = document.querySelector("canvas");
+const activeUser = document.getElementsByClassName("activeUsername");
 
 
 // rita 2d i canvas elementet
@@ -20,7 +21,11 @@ const ctx = canvas.getContext("2d");
 const websocket = new WebSocket("ws://localhost:8555");
 import Player from "./Player.js";
 
-let player = new Player()
+let player;
+// let player = ("nfds", "fasdfdf")
+
+
+console.log(player);
 
 
 
@@ -28,6 +33,7 @@ let player = new Player()
 // ------------------------------------------------------
 
 let username;
+let color;
 let authenticated = false;
 let isDrawing = false;
 let points = [];
@@ -71,6 +77,9 @@ formUsername.addEventListener("submit", (e) => {
                 authenticated = true;
                 username = data.username;
 
+                // instansiera en ny "player"
+                player = new Player(data.id, data.username, data.color);
+
                 console.log("authenticated", authenticated, "username", username);
 
                 userElement.setAttribute("disabled", true);
@@ -80,7 +89,7 @@ formUsername.addEventListener("submit", (e) => {
                 msgElement.focus();
 
                 // meddela via websockets att en användare har autentiserats
-                const obj = { type: "new_user", username: username };
+                const obj = { type: "new_user", username: username, player: player};
                 websocket.send(JSON.stringify(obj));
 
             } else {
@@ -186,21 +195,29 @@ canvas.addEventListener("dblclick", (e) => {
 // lägg till händelselyssnare för att kunna rita i ett canvas-element
 canvas.addEventListener("mousedown", (e) => {
     const point = {x: e.offsetX, y: e.offsetY};
-    console.log("mousedown");
+    // console.log("mousedown");
     isDrawing = true;
 
-    ctx.beginPath();
-    ctx.moveTo(point.x, point.y);
+    if (!player) { return }
+
+    player.drawStart(canvas, ctx, point);
+
+    // ctx.beginPath();
+    // ctx.moveTo(point.x, point.y);
 
     // buffra koordinat (point)
     points.push(point);
 })
 
 canvas.addEventListener("mouseup", (e) => {
-    console.log("mouseup");
+    const point = {x: e.offsetX, y: e.offsetY};
+    // console.log("mouseup");
     isDrawing = false;
 
-    ctx.closePath();
+    if (!player) { return }
+
+    player.drawEnd(canvas, ctx);
+    // ctx.closePath();
 
     // sänd buffrade koordinater via websocket
     websocket.send(JSON.stringify({type: "draw", points: points}));
@@ -211,11 +228,13 @@ canvas.addEventListener("mouseup", (e) => {
 
 canvas.addEventListener("mousemove", (e) => {
     const point = {x: e.offsetX, y: e.offsetY};
-    console.log(point);
+    // console.log(point);
     if (!isDrawing) { return };
+    if (!player) { return }
 
-    ctx.lineTo(point.x, point.y);
-    ctx.stroke();
+    player.draw(canvas, ctx, point);
+    // ctx.lineTo(point.x, point.y);
+    // ctx.stroke();
 
     // buffra kordinater (points) och skicka klumpvis med ws
     points.push(point);

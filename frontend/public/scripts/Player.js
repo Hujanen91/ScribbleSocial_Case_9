@@ -14,7 +14,43 @@ class Player {
     constructor(id, username, color) {
         this.id = id;
         this.username = username;
-        this.color = color || "yellow";
+        // create a random color for new players:
+        this.color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0') || "yellow";
+    }
+
+    /**
+     *
+     *
+     * @param {HTMLCanvasElement} canvas
+     * @param {CanvasRenderingContext2D} ctx
+     * @memberof Player
+     */
+    drawStart(canvas, ctx, point) {
+        ctx.beginPath();
+        ctx.moveTo(point.x, point.y);
+    }
+
+    /**
+     *
+     *
+     * @param {HTMLCanvasElement} canvas
+     * @param {CanvasRenderingContext2D} ctx
+     * @memberof Player
+     */
+    draw(canvas, ctx, point) {
+        ctx.lineTo(point.x, point.y);
+        ctx.stroke();
+    }
+
+    /**
+     *
+     *
+     * @param {HTMLCanvasElement} canvas
+     * @param {CanvasRenderingContext2D} ctx
+     * @memberof Player
+     */
+    drawEnd(canvas, ctx) {
+        ctx.closePath();
     }
 }
 

@@ -57,7 +57,7 @@ server.on("upgrade", (req, socket, head) => {
 });
 
 
-let users = ["Knatte", "Fnatte", "Tjatte"];
+// let users = ["Knatte", "Fnatte", "Tjatte"];
 
 
 // array för aktiva användarnamnet
@@ -76,28 +76,16 @@ app.post('/login', (req, res) => {
     console.log("A post request...", req.body);
 
     let username = req.body.username;
+    // let color = req.body.color;
     console.log("username", username);
 
-    if (users.includes(username)) {
-        console.log("User is available");
-
-        // se till att aktuellt username tas bort från users
-        // ev kolla så att ett namn matchar även om man ex glömmer inledande versal
-
-        users = users.filter((u) => u != username);
-
-        console.log("Users left:", users);
+    if (username.length > 3 && username.length < 10 ) {
 
         // skicka ett objekt:
         res.send({ authenticated: true, username: username, id: nanoid()});
-        
 
         // uppdatera listan med usersonline
         // usersOnline.push(username);
-
-        // för att användaren som verifierats ska kopplas till en websocketklient
-        // avvakta med att uppdatera usersOnline tills dess att websocket är klar...
-
 
     } else {
         res.send({ authenticated: false });
