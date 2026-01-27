@@ -10,30 +10,39 @@
 </head>
 
 <body>
+    <section class="loginCanvas">
+        <h1>ScribbleSocial</h1>
+        <canvas width="300" height="200" class="hidden"></canvas>
+        <div id="usernameDiv">
+            <p class="activeUsername">
+                Create a username:
+            </p>
 
-    <h1>ScribbleSocial</h1>
-    <canvas width="300" height="200"></canvas>
-    <p class="activeUsername">
-        Create a username:
-    </p>
+            <!-- formulär som anger vem man är... -->
+            <form id="formUsername" action="">
+                <input type="text" name="username" id="username" placeholder="Username" required minlength="3"
+                    maxlength="10">
+                <input type="submit" value="Start talking!">
+            </form>
+            <p id="alertDisplay"></p>
+        </div>
+    </section>
 
-    <!-- formulär som anger vem man är... -->
-    <form id="formUsername" action="">
-        <input type="text" name="username" id="username" placeholder="Username" required minlength="3" maxlength="10">
-        <input type="submit" value="Start talking!">
-    </form>
-    <p id="alertDisplay"></p>
-    <div>Users currently online:</div>
-    <div>
-        <li id="onlineUsers"></li>
-    </div>
-    <section id="chatStage" class="hidden">
 
-        <!-- formulär för att skriva meddelande... -->
-        <form id="formMessage" action="">
-            <input type="text" name="msg" id="msg" placeholder="Say something!" required>
-            <input type="submit" value="Send">
-        </form>
+    <section class="hidden" id="chatStage">
+        <div class="chatInputDiv">
+            <h3>Users currently online:</h3>
+            <div>
+                <li id="onlineUsers"></li>
+            </div>
+
+
+            <!-- formulär för att skriva meddelande... -->
+            <form id="formMessage" action="">
+                <input type="text" name="msg" id="msg" placeholder="Say something!" required>
+                <input type="submit" value="Send">
+            </form>
+        </div>
         <br>
 
 
@@ -41,8 +50,8 @@
 
             <!-- <time datetime=""></time> -->
         </div>
-
     </section>
+
 
     <script src="scripts/code.js" type="module"></script>
 

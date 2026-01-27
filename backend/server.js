@@ -57,9 +57,6 @@ server.on("upgrade", (req, socket, head) => {
 });
 
 
-// let users = ["Knatte", "Fnatte", "Tjatte"];
-
-
 // array för aktiva användarnamnet
 let usersOnline = [];
 

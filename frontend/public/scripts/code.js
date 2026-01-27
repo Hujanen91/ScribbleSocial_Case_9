@@ -4,6 +4,7 @@ const formMessage = document.querySelector("#formMessage");
 const formUsername = document.querySelector("#formUsername");
 const userElement = document.querySelector("input#username");
 const chatSection = document.getElementById("chatStage");
+const usernameDiv = document.getElementById("usernameDiv");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
 const onlineUsersElement = document.getElementById("onlineUsers");
@@ -16,13 +17,11 @@ const activeUser = document.getElementsByClassName("activeUsername");
 const ctx = canvas.getContext("2d");
 
 
-
 // dependencies - WebSocket
 const websocket = new WebSocket("ws://localhost:8555");
 import Player from "./Player.js";
 
 let player;
-// let player = ("nfds", "fasdfdf")
 
 
 console.log(player);
@@ -84,6 +83,9 @@ formUsername.addEventListener("submit", (e) => {
 
                 userElement.setAttribute("disabled", true);
                 chatSection.classList.remove("hidden");
+                canvas.classList.remove("hidden");
+                usernameDiv.classList.add("hidden");
+
 
                 // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
                 msgElement.focus();
@@ -296,18 +298,18 @@ function renderChatMessage(obj) {
 
 }
 
-/**
- * 
- * @param {Object} point 
- * @param {Number} radius 
- */
-function drawCircle(point, radius) {
-    ctx.beginPath();
-    ctx.arc(point.x, point.y, radius, 0, Math.PI * 2, true);
-    ctx.fillStyle = "yellow"
-    ctx.fill();
-    ctx.closePath();
-}
+// /**
+//  * 
+//  * @param {Object} point 
+//  * @param {Number} radius 
+//  */
+// function drawCircle(point, radius) {
+//     ctx.beginPath();
+//     ctx.arc(point.x, point.y, radius, 0, Math.PI * 2, true);
+//     ctx.fillStyle = "yellow"
+//     ctx.fill();
+//     ctx.closePath();
+// }
 
 function drawLine(obj) {
 

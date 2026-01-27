@@ -15,7 +15,7 @@ class Player {
         this.id = id;
         this.username = username;
         // create a random color for new players:
-        this.color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0') || "yellow";
+        this.color = color || '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
     }
 
     /**
@@ -27,6 +27,7 @@ class Player {
      */
     drawStart(canvas, ctx, point) {
         ctx.beginPath();
+        ctx.strokeStyle = this.color;
         ctx.moveTo(point.x, point.y);
     }
 

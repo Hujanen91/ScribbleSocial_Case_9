@@ -1,41 +1,80 @@
 body {
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
     
 }
 
-section#chatStage {
-
+.loginCanvas {
+    align-items: center;
 }
 
-.hidden {
+#formUsername {
+    display: flex;
+    flex-direction: column;
+}
+
+#usernameDiv p {
+    text-align: center;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden{
     display: none;
 }
 
-#chat .textMsg {
-    display: grid;
-    justify-self: start;
-    justify-content: start;
-    align-self: right;
-    text-align: left;
-    width: 45%;
+#usernameDiv {
+    flex-direction: column;
+    justify-content: center;
+}
+
+li {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+#chatStage {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.chatInputDiv {
+    align-self: center;
+}
+
+#chat {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    background-color: azure;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#chat .textMsg, #chat .other {
+    width: 60%;
+    max-width: 500px;
     padding: 5px;
     margin: 5px;
     border: 1px solid black;
     border-radius: 5px;
+    background-color: white;
+}
+
+#chat .textMsg {
+    align-self: flex start;
 }
 
 #chat .other{
-    display: grid;
-    justify-self: end;
-    justify-content: end;
-    align-self: left;
+    align-self: flex-end;
     text-align: right;
-    width: 45%;
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-    
 }
 
 /* .username {
@@ -51,4 +90,14 @@ canvas {
     border-radius: 10px;
     border-width: 3px;
     border-style: inset;
+}
+
+#chat {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    height: 100vh;
+    background-color: azure;
+    box-sizing: border-box;
 }
