@@ -28,3 +28,6 @@ Frågan till AI:
 Jag la till och frågade vad jag missade i min kod, lösningen var simpel och jag var på god väg med min kod redan, dock var ordningen lite snurrig.
 
 Lösningen blev att korrigera ordningen så att längd och namn i listan kollas först och sedan pushas, jag fick även rådet att använda två if-sater där jag först kollade om namnet fanns redan och i nästa kollade längden och där med en logical OR (||) istället för en logical and (&&).
+
+Situation:
+Jag frågade AI hur det kommer sig att canvas behöver bredd och höjd på html OCH css och fick vidare råd om att lägga till en inställning i js istället som anpassar canvasrutan efter skärmens faktiska storlek då detta blir mer anpassningsbart.

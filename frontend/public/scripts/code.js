@@ -14,7 +14,7 @@ const activeUser = document.getElementsByClassName("activeUsername");
 const logoutBtn = document.getElementById("logoutBtn");
 
 // rita 2d i canvas elementet
-const ctx = canvas.getContext("2d");
+// const ctx = canvas.getContext("2d");
 
 
 // dependencies - WebSocket
@@ -30,12 +30,15 @@ let player;
 
 // variabler, inställningar
 // ------------------------------------------------------
-
+let ctx;
 let username;
 let color;
 let authenticated = false;
 let isDrawing = false;
 let points = [];
+const logoutButton = () => {
+    location.reload();
+}
 // const currentUsers = [];
 
 
@@ -45,7 +48,7 @@ let points = [];
 // ctx.arc(canvas.width / 2, canvas.height / 2, 10, 0, Math.PI * 2, true);
 
 // rita
-ctx.fill();
+// ctx.fill();
 
 
 // händelselyssnare
@@ -86,7 +89,7 @@ formUsername.addEventListener("submit", (e) => {
                 canvas.classList.remove("hidden");
                 usernameDiv.classList.add("hidden");
                 logoutBtn.classList.remove("hidden");
-
+                resizeCanvas();
 
                 // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
                 msgElement.focus();
@@ -94,6 +97,13 @@ formUsername.addEventListener("submit", (e) => {
                 // meddela via websockets att en användare har autentiserats
                 const obj = { type: "new_user", username: username, player: player };
                 websocket.send(JSON.stringify(obj));
+
+                // const userData = {
+                //     username: data.username,
+                //     id: data.id
+                // };
+
+                // sessionStorage.setItem("chatUser", JSON.stringify(userData));
 
             } else {
                 console.log("Username already in use");
@@ -140,16 +150,7 @@ msgElement.addEventListener("keydown", (e) => {
     // ...hanter att en person skriver ngt - kan kanske skickas som en händelse backend...
 });
 
-logoutBtn.addEventListener("click", (e) => {
-
-    
-
-    chatSection.classList.add("hidden");
-    canvas.classList.add("hidden");
-    logoutBtn.classList.add("hidden");
-    usernameDiv.classList.remove("hidden");
-
-});
+logoutBtn.addEventListener("click", logoutButton);
 
 // aktivera lyssnare på socket events
 websocket.addEventListener("message", (e) => {
@@ -175,8 +176,7 @@ websocket.addEventListener("message", (e) => {
             // console.log("uppdatera att följande användare är på plats...", obj.username)
 
             // visa en uppdaterad lista på aktuella användare som servern anser vara online
-            onlineUsersElement.textContent = obj.usersOnline;
-            // onlineUsersElement.innerHTML = obj.usersOnline.map(u => `<span>${u}</span>`)
+            onlineUsersElement.innerHTML = obj.usersOnline.map(users => `<li>${users}</li>`).join("");
             break;
 
         case "user_left":
@@ -202,47 +202,43 @@ websocket.addEventListener("message", (e) => {
 //     drawCircle(point, radius);
 // });
 
-
+window.addEventListener("load", resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
 
 // lägg till händelselyssnare för att kunna rita i ett canvas-element
 canvas.addEventListener("mousedown", (e) => {
-    const point = { x: e.offsetX, y: e.offsetY };
-    // console.log("mousedown");
-    isDrawing = true;
+    const rect = canvas.getBoundingClientRect();
+    const point = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
 
     if (!player) { return }
+
+    // const point = { x: e.offsetX, y: e.offsetY };
+    // console.log("mousedown");
+    isDrawing = true;
 
     player.drawStart(canvas, ctx, point);
 
     // ctx.beginPath();
     // ctx.moveTo(point.x, point.y);
-
+    points = [];
     // buffra koordinat (point)
     points.push(point);
-})
-
-canvas.addEventListener("mouseup", (e) => {
-    const point = { x: e.offsetX, y: e.offsetY };
-    // console.log("mouseup");
-    isDrawing = false;
-
-    if (!player) { return }
-
-    player.drawEnd(canvas, ctx);
-    // ctx.closePath();
-
-    // sänd buffrade koordinater via websocket
-    websocket.send(JSON.stringify({ type: "draw", points: points }));
-
-    // ta bort alla tidigare koordinater
-    points = [];
-})
+});
 
 canvas.addEventListener("mousemove", (e) => {
-    const point = { x: e.offsetX, y: e.offsetY };
+    // const point = { x: e.offsetX, y: e.offsetY };
     // console.log(point);
     if (!isDrawing) { return };
-    if (!player) { return }
+    if (!player) { return };
+
+    const rect = canvas.getBoundingClientRect();
+    const point = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
 
     player.draw(canvas, ctx, point);
     // ctx.lineTo(point.x, point.y);
@@ -251,6 +247,32 @@ canvas.addEventListener("mousemove", (e) => {
     // buffra kordinater (points) och skicka klumpvis med ws
     points.push(point);
 });
+
+canvas.addEventListener("mouseup", (e) => {
+    // const points = { x: e.offsetX, y: e.offsetY };
+    // console.log("mouseup");
+    if (!player) { return }
+
+    isDrawing = false;
+
+    // HÄR SKER MAGIN: Vi paketerar points OCH färg i ett objekt
+    const drawingData = {
+        type: "draw",
+        points: points,       // Arrayen med alla punkter från mousedown till mouseup
+        color: player.color,  // Ser till att obj.color inte blir undefined på servern
+        username: player.username // Valfritt: bra för att veta vem som ritat
+    };
+    // player.drawEnd(canvas, ctx);
+    // ctx.closePath();
+
+    // sänd buffrade koordinater via websocket
+    websocket.send(JSON.stringify(drawingData));
+
+    // ta bort alla tidigare koordinater
+    points = [];
+})
+
+
 
 
 // funktioner
@@ -308,6 +330,15 @@ function renderChatMessage(obj) {
 
 }
 
+function resizeCanvas() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    ctx = canvas.getContext("2d");
+}
+
+resizeCanvas();
+
 // /**
 //  * 
 //  * @param {Object} point 
@@ -324,15 +355,28 @@ function renderChatMessage(obj) {
 function drawLine(obj) {
 
     const points = obj.points;
-    if (points && points.length > 0) {
-        ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
 
-        for (let i = 1; i < points.length; i++) {
-            ctx.lineTo(points[i].x, points[i].y);
-            ctx.stroke();
-        }
+    if (!points || points.length < 2) return;
+    console.log("Ritar linje med färg:", obj.color, "Första punkt:", points[0]);
+    if (!ctx) ctx = canvas.getContext("2d");
 
-        ctx.closePath();
+    ctx.beginPath();
+    ctx.strokeStyle = obj.color || "black";
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+
+    ctx.moveTo(points[0].x, points[0].y);
+
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+
     }
+    ctx.stroke();
+    ctx.closePath();
+}
+
+function refreshPage() {
+    window.location.reload();
 }

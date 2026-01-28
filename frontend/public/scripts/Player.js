@@ -28,6 +28,8 @@ class Player {
     drawStart(canvas, ctx, point) {
         ctx.beginPath();
         ctx.strokeStyle = this.color;
+        ctx.lineWidth = 5;
+        ctx.lineCap = "round";
         ctx.moveTo(point.x, point.y);
     }
 
