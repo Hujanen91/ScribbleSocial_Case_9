@@ -11,7 +11,7 @@ const onlineUsersElement = document.getElementById("onlineUsers");
 const alertDisplay = document.getElementById("alertDisplay");
 const canvas = document.querySelector("canvas");
 const activeUser = document.getElementsByClassName("activeUsername");
-
+const logoutBtn = document.getElementById("logoutBtn");
 
 // rita 2d i canvas elementet
 const ctx = canvas.getContext("2d");
@@ -85,21 +85,19 @@ formUsername.addEventListener("submit", (e) => {
                 chatSection.classList.remove("hidden");
                 canvas.classList.remove("hidden");
                 usernameDiv.classList.add("hidden");
+                logoutBtn.classList.remove("hidden");
 
 
                 // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
                 msgElement.focus();
 
                 // meddela via websockets att en användare har autentiserats
-                const obj = { type: "new_user", username: username, player: player};
+                const obj = { type: "new_user", username: username, player: player };
                 websocket.send(JSON.stringify(obj));
 
             } else {
                 console.log("Username already in use");
                 // ge meddelande till klient: autentisering ej ok
-            }
-            if(username.value === username.value){
-
             }
         });
 });
@@ -142,6 +140,17 @@ msgElement.addEventListener("keydown", (e) => {
     // ...hanter att en person skriver ngt - kan kanske skickas som en händelse backend...
 });
 
+logoutBtn.addEventListener("click", (e) => {
+
+    
+
+    chatSection.classList.add("hidden");
+    canvas.classList.add("hidden");
+    logoutBtn.classList.add("hidden");
+    usernameDiv.classList.remove("hidden");
+
+});
+
 // aktivera lyssnare på socket events
 websocket.addEventListener("message", (e) => {
 
@@ -179,25 +188,25 @@ websocket.addEventListener("message", (e) => {
             // anropa en funktion
             drawLine(obj);
 
-        break;
+            break;
     }
 
 
 });
 
 
-canvas.addEventListener("dblclick", (e) => {
-    // kordinater
-    const point = {x: e.offsetX, y: e.offsetY};
-    const radius = Math.ceil(Math.random() * 40);
-    drawCircle(point, radius);
-});
+// canvas.addEventListener("dblclick", (e) => {
+//     // kordinater
+//     const point = {x: e.offsetX, y: e.offsetY};
+//     const radius = Math.ceil(Math.random() * 40);
+//     drawCircle(point, radius);
+// });
 
 
 
 // lägg till händelselyssnare för att kunna rita i ett canvas-element
 canvas.addEventListener("mousedown", (e) => {
-    const point = {x: e.offsetX, y: e.offsetY};
+    const point = { x: e.offsetX, y: e.offsetY };
     // console.log("mousedown");
     isDrawing = true;
 
@@ -213,7 +222,7 @@ canvas.addEventListener("mousedown", (e) => {
 })
 
 canvas.addEventListener("mouseup", (e) => {
-    const point = {x: e.offsetX, y: e.offsetY};
+    const point = { x: e.offsetX, y: e.offsetY };
     // console.log("mouseup");
     isDrawing = false;
 
@@ -223,14 +232,14 @@ canvas.addEventListener("mouseup", (e) => {
     // ctx.closePath();
 
     // sänd buffrade koordinater via websocket
-    websocket.send(JSON.stringify({type: "draw", points: points}));
+    websocket.send(JSON.stringify({ type: "draw", points: points }));
 
     // ta bort alla tidigare koordinater
     points = [];
 })
 
 canvas.addEventListener("mousemove", (e) => {
-    const point = {x: e.offsetX, y: e.offsetY};
+    const point = { x: e.offsetX, y: e.offsetY };
     // console.log(point);
     if (!isDrawing) { return };
     if (!player) { return }

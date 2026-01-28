@@ -66,7 +66,6 @@ let usersOnline = [];
 app.use(express.json());
 
 
-
 // routes
 // ------------------------------------------------------
 app.post('/login', (req, res) => {
@@ -162,7 +161,6 @@ wss.on('connection', (ws) => {
             case "new_user":
 
                 // uppdatera listan usersOnline med användaren
-                usersOnline.push(obj.username);
                 obj.usersOnline = usersOnline;
 
                 // en variant som funkar i js
