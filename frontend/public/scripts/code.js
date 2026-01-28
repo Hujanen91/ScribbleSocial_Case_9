@@ -24,7 +24,7 @@ import Player from "./Player.js";
 let player;
 
 
-console.log(player);
+// console.log(player);
 
 
 
@@ -97,7 +97,8 @@ formUsername.addEventListener("submit", (e) => {
             } else {
                 console.log("Username already in use");
                 // ge meddelande till klient: autentisering ej ok
-
+            }
+            if(username.value === username.value){
 
             }
         });
@@ -136,7 +137,7 @@ formMessage.addEventListener("submit", (e) => {
 
 // aktivera lyssnare på input#msg: kan användas för att visa att ngn skriver tex "...is typing"
 msgElement.addEventListener("keydown", (e) => {
-    console.log("is typing", e.key);
+    // console.log("is typing", e.key);
 
     // ...hanter att en person skriver ngt - kan kanske skickas som en händelse backend...
 });
@@ -158,11 +159,11 @@ websocket.addEventListener("message", (e) => {
             break;
 
         case "new_client":
-            console.log("uppdatera ngt på klientsidan", obj.usersOnline)
+            // console.log("uppdatera ngt på klientsidan", obj.usersOnline)
             break;
 
         case "new_user":
-            console.log("uppdatera att följande användare är på plats...", obj.username)
+            // console.log("uppdatera att följande användare är på plats...", obj.username)
 
             // visa en uppdaterad lista på aktuella användare som servern anser vara online
             onlineUsersElement.textContent = obj.usersOnline;

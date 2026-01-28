@@ -70,24 +70,26 @@ app.use(express.json());
 // routes
 // ------------------------------------------------------
 app.post('/login', (req, res) => {
-    console.log("A post request...", req.body);
-
     let username = req.body.username;
-    // let color = req.body.color;
     console.log("username", username);
 
-    if (username.length > 3 && username.length < 10 ) {
-
-        // skicka ett objekt:
-        res.send({ authenticated: true, username: username, id: nanoid()});
-
-        // uppdatera listan med usersonline
-        // usersOnline.push(username);
-
-    } else {
-        res.send({ authenticated: false });
+    if (usersOnline.includes(username)) {
+        console.log("username already in use", username);
+        return res.send({ authenticated: false, message: "Username is already in use" });
     }
 
+    if (username.length <= 2 || username.length >= 10) {
+        // uppdatera listan med usersonline
+        // usersOnline.push(username);
+        console.log("users:", usersOnline);
+        return res.send({ authenticated: false, message: "Username is too short or too long" });
+        
+    }
+    usersOnline.push(username);
+    console.log("current users online:", usersOnline);
+
+// skicka ett objekt:
+    res.send({ authenticated: true, username: username, id: nanoid() });
 });
 
 
