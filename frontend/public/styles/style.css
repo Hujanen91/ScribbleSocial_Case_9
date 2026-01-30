@@ -1,3 +1,17 @@
+/* CSS HSL */
+:root{
+--indigo: hsla(287, 100%, 23%, 1);
+--vivid-orchid: hsla(309, 100%, 43%, 1);
+--royal-orchid-opacity: hsla(289, 100%, 31%, 0.75);
+--royal-orchid: rgba(129, 0, 158, 1);
+--crimson-violet: hsla(310, 100%, 16%, 1);
+--crimson-violet-opacity: hsla(310, 100%, 16%, 0.75);
+--midnight-violet-opacity: rgba(36, 0, 30, 0.757);
+--midnight-violet: rgba(36, 0, 30, 1);
+--indigo-2: hsla(276, 100%, 23%, 1);
+--white-grey: rgb(225, 225, 225);
+}
+
 body {
     background: url(../assets/images/1qltq5uehmr71.png);
     background-size: cover;
@@ -6,9 +20,15 @@ body {
     min-height: 100vh;
     width: 100%;
     margin: 0;
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family:DM sans, Georgia, Times, 'Times New Roman', serif;
     font-size: larger;
-    color: rgb(225, 225, 225);
+    font-weight: 300;
+    color: var(--white-grey);
+}
+
+h1 {
+    font-weight: 400;
+    letter-spacing: 0.2rem;
 }
 
 .loginCanvas {
@@ -16,18 +36,30 @@ body {
 }
 
 input {
+    font-size: 14px;
     padding: 10px;
     margin: 3px;
-    background-color: rgba(99, 33, 101, 0.413);
-    color: white;
+    font-weight: 600;
+    background-color: var(--midnight-violet-opacity);
+    color: var(--white-grey);
+    border: var(--indigo) 2px solid;
 }
 
 #username {
     border-radius: 20px 5px 0px 0px;
 }
 
-input[type="submit"] {
+::placeholder {
+    color: rgba(255, 255, 255, 0.506);
+}
+
+#loginBtn {
     border-radius: 0px 0px 20px 5px;
+    background-color: var(--crimson-violet-opacity);
+}
+
+#logoutBtn {
+    border-radius: 5px;
 }
 
 #formUsername {
@@ -40,6 +72,7 @@ input[type="submit"] {
 
 #usernameDiv p {
     text-align: center;
+    margin: 5px;
 }
 
 section {
@@ -89,6 +122,8 @@ li {
 }
 
 #chat .textMsg, #chat .other {
+    font-size: 14px;
+    font-weight: 200;
     z-index: 1;
     width: 60%;
     max-width: 500px;
@@ -97,6 +132,15 @@ li {
     border: 1px solid black;
     border-radius: 5px;
     background-color: rgba(99, 33, 101, 0.751);
+}
+
+#chat .username {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#chat time {
+    font-size: 12px;
 }
 
 #chat .textMsg {

@@ -5,8 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScribbleSocial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Carattere&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="styles/style.css">
+
 </head>
 
 <body>
@@ -20,13 +26,13 @@
         <input type="submit" value="Leave chatroom" id="logoutBtn" class="hidden">
         <div id="usernameDiv">
             <p class="activeUsername">
-                Create a username:
+                Create your username:
             </p>
             <!-- formulär som anger vem man är... -->
             <form id="formUsername" action="">
                 <input type="text" name="username" id="username" placeholder="Username" required minlength="3"
                     maxlength="10">
-                <input type="submit" value="Start talking!">
+                <input id="loginBtn" type="submit" value="Start talking!">
             </form>
             <p id="alertDisplay"></p>
         </div>
