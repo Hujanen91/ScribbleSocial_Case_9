@@ -7,6 +7,9 @@ const chatSection = document.getElementById("chatStage");
 const usernameDiv = document.getElementById("usernameDiv");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
+const welcomeUser = document.getElementById("welcomeUser");
+const userImgDiv = document.getElementById("userImgDiv");
+const headerTitle = document.querySelector("h1");
 const onlineUsersElement = document.getElementById("onlineUsers");
 const alertDisplay = document.getElementById("alertDisplay");
 const canvas = document.querySelector("canvas");
@@ -87,9 +90,15 @@ formUsername.addEventListener("submit", (e) => {
                 userElement.setAttribute("disabled", true);
                 chatSection.classList.remove("hidden");
                 canvas.classList.remove("hidden");
-                usernameDiv.classList.add("hidden");
                 logoutBtn.classList.remove("hidden");
+                userImgDiv.classList.remove("hidden");
+                usernameDiv.classList.add("hidden");
+                headerTitle.classList.add("hidden");
+                
                 resizeCanvas();
+
+                welcomeUser.textContent = data.username;
+                
 
                 // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
                 msgElement.focus();

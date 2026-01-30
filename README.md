@@ -31,3 +31,11 @@ Lösningen blev att korrigera ordningen så att längd och namn i listan kollas 
 
 Situation:
 Jag frågade AI hur det kommer sig att canvas behöver bredd och höjd på html OCH css och fick vidare råd om att lägga till en inställning i js istället som anpassar canvasrutan efter skärmens faktiska storlek då detta blir mer anpassningsbart.
+
+Frågan till AI:
+Efter korringering av canvas-rutan har nu linjen spelaren spelar med försvunnit, man kan inte se något när man ritar och inga errors dyker upp, frågan blev varför, vad jag missade i koden.
+
+Lösning:
+Jag hade dels glömt definera i Player.js under drawstart vad jag ville ha för settings på ctx så dessa skickades inte med som dom skulle. Jag hade även missat att kalla på funktionen som anpassade canvasrutan efter skärmens storlek inne i min submit när en användare loggar in, pga detta blev förmodligen canvasrutan inte i rätt storlek och jag ritade inte på "rätt ställe". 
+När funktionen kallades in direkt efter jag plockat bort "hidden" på canvas-elementet så fungerade det att rita.
+
