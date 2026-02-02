@@ -384,6 +384,10 @@ function drawLine(obj) {
     }
     ctx.stroke();
     ctx.closePath();
+    
+    ctx.fillText(obj.username, points[0].x, points[0].y);
+    ctx.font = "14px";
+    ctx_wrap.fillStyle(obj.color);
 }
 
 function refreshPage() {
