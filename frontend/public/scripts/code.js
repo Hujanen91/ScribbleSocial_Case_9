@@ -21,7 +21,11 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 
 // dependencies - WebSocket
-const websocket = new WebSocket("ws://localhost:8555");
+// const websocket = new WebSocket("ws://localhost:8555");
+const serverIP = "192.168.0.2"; // BYT UT MOT DIN IP!
+const websocket = new WebSocket(`ws://${serverIP}:8555`);
+const endpoint = `http://${serverIP}:8555/login`;
+
 import Player from "./Player.js";
 
 let player;
@@ -62,7 +66,7 @@ formUsername.addEventListener("submit", (e) => {
 
     username = userElement.value;
 
-    const endpoint = "http://localhost:8555/login";
+    // const endpoint = "http://localhost:8555/login";
 
     const options = {
         method: "POST",
@@ -118,7 +122,11 @@ formUsername.addEventListener("submit", (e) => {
                 console.log("Username already in use");
                 // ge meddelande till klient: autentisering ej ok
             }
-        });
+        })
+        .catch(err => {
+        alert("Kunde inte ansluta till servern! Kontrollera IP-adressen. Fel: " + err);
+    });
+        
 });
 
 
@@ -217,6 +225,30 @@ window.addEventListener("resize", resizeCanvas);
 // lägg till händelselyssnare för att kunna rita i ett canvas-element
 canvas.addEventListener("mousedown", (e) => {
     const rect = canvas.getBoundingClientRect();
+    const point = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+
+    if (!player) { return }
+
+    // const point = { x: e.offsetX, y: e.offsetY };
+    // console.log("mousedown");
+    isDrawing = true;
+
+    player.drawStart(canvas, ctx, point);
+
+    // ctx.beginPath();
+    // ctx.moveTo(point.x, point.y);
+    points = [];
+    // buffra koordinat (point)
+    points.push(point);
+});
+
+canvas.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
     const point = {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top
