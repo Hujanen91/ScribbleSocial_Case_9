@@ -16,27 +16,30 @@
 </head>
 
 <body>
-    <section class="loginCanvas">
-        <h1>ScribbleSocial</h1>
-        <div id="userImgDiv" class="hidden">
-            <p class="welcomeUser"><span id="welcomeUser"></span></p>
-        </div>
-        <canvas class="hidden"></canvas>
+    <div class="divMainBox">
+        <!-- <section class="loginCanvas"> -->
+            <h1>ScribbleSocial</h1>
+            <!-- <p>Welcome to ScribbleSocial, a chatroom where we doodle and talk! Come on in!</p> -->
+            <div id="userImgDiv" class="hidden">
+                <p class="welcomeUser"><span id="welcomeUser"></span></p>
+            </div>
+            <canvas class="hidden"></canvas>
 
-        <input type="submit" value="Leave chatroom" id="logoutBtn" class="hidden">
-        <div id="usernameDiv">
-            <p class="activeUsername">
-                Create your username:
-            </p>
-            <!-- formulär som anger vem man är... -->
-            <form id="formUsername" action="">
-                <input type="text" name="username" id="username" placeholder="Username" required minlength="3"
-                    maxlength="10">
-                <input id="loginBtn" type="submit" value="Start talking!">
-            </form>
-            <p id="alertDisplay"></p>
-        </div>
-    </section>
+            <input type="submit" value="Leave chatroom" id="logoutBtn" class="hidden">
+            <div id="usernameDiv">
+                <p class="activeUsername">
+                    Create your username:
+                </p>
+                <!-- formulär som anger vem man är... -->
+                <form id="formUsername" action="">
+                    <input type="text" name="username" id="username" placeholder="Username" required minlength="3"
+                        maxlength="10">
+                    <input id="loginBtn" type="submit" value="Start talking!">
+                </form>
+                <p id="alertDisplay"></p>
+            </div>
+        <!-- </section> -->
+    </div>
 
 
     <section class="hidden" id="chatStage">

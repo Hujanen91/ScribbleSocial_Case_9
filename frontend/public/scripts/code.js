@@ -123,10 +123,6 @@ formUsername.addEventListener("submit", (e) => {
                 // ge meddelande till klient: autentisering ej ok
             }
         })
-        .catch(err => {
-        alert("Kunde inte ansluta till servern! Kontrollera IP-adressen. Fel: " + err);
-    });
-        
 });
 
 
