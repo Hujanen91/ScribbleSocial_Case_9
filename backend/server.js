@@ -11,6 +11,7 @@ import { nanoid } from 'nanoid';
 // absolut sökväg. Vi meddelar node exakt vart filerna finns oavsett vart vi startar servern från
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 
 
 // hämta url från den aktuella filen (server.js)
@@ -63,6 +64,7 @@ let usersOnline = [];
 
 // middleware
 // ------------------------------------------------------
+app.use(cors());
 app.use(express.json());
 
 
