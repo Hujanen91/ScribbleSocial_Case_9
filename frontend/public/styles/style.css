@@ -21,6 +21,7 @@ body {
     background: url(../assets/images/1qltq5uehmr71.png);
     background-size: cover;
     background-repeat: no-repeat;
+    /* background-attachment: scroll; */
     position: relative;
     min-height: 150vh;
     width: 100%;
@@ -32,19 +33,20 @@ body {
 }
 
 h1 {
-    position: absolute;
-    top: 0;
-    margin: 30px 0 10px 0;
+    position: relative;
+    top: auto;
+    margin: 30px 0;
     font-weight: 400;
     letter-spacing: 0.2rem;
+    text-align: center;
 }
 
 .div-outer-box {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 95%;
+    justify-content: flex-start;
+    padding: 30px;
     height: 80vh;
     background: var(--crimson-violet-opactiy-glass);
     box-shadow: 0 8px 30px 0 var(--crimson-violet);
@@ -59,14 +61,14 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 95%;
 }
 
 .div-main-box-logged-in {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     /* width: 95%;
     height: 80vh; */
@@ -90,14 +92,16 @@ h1 {
 } */
 
 .description-section {
+    display: block;
     align-items: center;
     text-align: center;
-    width: 80%;
+    width: 40%;
     color: var(--white-grey);
-    margin-bottom: 25px;
+    margin: 0 auto 25px auto;
 }
 
 input {
+    border-radius: 5px;
     font-size: 14px;
     padding: 10px;
     margin: 3px;
@@ -105,6 +109,26 @@ input {
     background-color: var(--midnight-violet-opacity);
     color: var(--white-grey);
     border: var(--indigo) 2px solid;
+}
+
+.chat-input-div {
+    position: relative;
+}
+
+#emoji-picker-container {
+    position: absolute;
+    width: 30%;
+    bottom: 50px; 
+    z-index: 100;
+}
+
+#emoji-trigger {
+    padding: 0;
+    height: 40px;
+    border-radius: 5px;
+    font-size: 20px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
 }
 
 #username {
@@ -124,7 +148,9 @@ input {
 }
 
 #logout-btn {
-    border-radius: 5px;
+    width: 286px;
+    align-self: start;
+    border-radius: 25px;
 }
 
 #form-username {
@@ -157,22 +183,25 @@ section {
 
 ul {
     display: flex;
-    padding: 2px;
     margin: 5px;
+    padding: 0;
 }
 
 li {
-    /* background-color: var(--crimson-violet);
+    background-color: var(--crimson-violet-opacity);
+    border-radius: 5px;
+    border: 1px solid var(--vivid-orchid);
     padding: 5px;
-    list-style: none;
-    width: 100%;
-    margin: 2px;
-    text-align: center; */
     display: flex;
     align-items: center; /* Centrerar pricken vertikalt med texten */
     gap: 8px;            /* Mellanrum mellan prick och namn */
     list-style: none;    /* Tar bort vanliga list-punkter */
-    margin-bottom: 5px;
+    margin: 5px;
+}
+
+#online-users-main-div {
+    width: 100%;
+    align-self: start;
 }
 
 .online-dot {
@@ -180,14 +209,17 @@ li {
     height: 12px;
     border-radius: 50%;
     display: inline-block;
+    border: 2px solid black;
 }
 
 #chat-stage {
+    display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: flex-start; */
 }
 
 .chat-input-div {
+    flex-direction: row;
     align-self: center;
 }
 
@@ -195,10 +227,13 @@ li {
     display: flex;
     flex-direction: column;
     width: 100%;
-    align-items: center;
-    padding: 20px;
+    height: 530px;
+    overflow-y: auto;
+    /* align-items: center; */
+    padding: 5px;
+    margin-right: 5px;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--crimson-violet-opacity);
 }
 
 #chat .text-msg,
@@ -241,12 +276,12 @@ li {
 
 canvas {
     /* display: block !important; */
-    margin: 5px;
-    /* width: 400px;
-    height: 300px; */
-    max-height: 500px;
-    border: 1px solid rgb(151, 151, 151);
-    background-color: white;
+    margin: 0px 5px;
+    /* width: 800px;
+    height: 500px; */
+    /* max-height: 500px; */
+    border: 1px solid var(--midnight-violet);
+    background-color: rgba(255, 255, 255, 0.534);
     opacity: 75%;
     border-radius: 10px;
     border-width: 3px;

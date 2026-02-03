@@ -17,13 +17,10 @@
 
 <body>
     <div class="div-outer-box">
-        <h3>Online:</h3>
         <div id="online-users-main-div" class="hidden">
 
-            <div id="online-users-div">
-                <ul id="online-users">
-                </ul>
-            </div>
+            <ul id="online-users">
+            </ul>
         </div>
         <div class="div-main-box">
             <h1>ScribbleSocial</h1>
@@ -33,7 +30,7 @@
                     drawn than said.</p>
             </section>
 
-            <canvas class="hidden" width="700" height="400"></canvas>
+            <canvas class="hidden" width="700" height="600"></canvas>
 
 
             <div id="username-div">
@@ -54,7 +51,13 @@
                     <!-- formulär för att skriva meddelande... -->
                     <form id="form-message" action="">
                         <input type="text" name="msg" id="msg" placeholder="Say something!" required>
+                        
+
                         <input type="submit" value="Send">
+                        <input type="button" id="emoji-trigger" value="😀"></input>
+                        <div id="emoji-picker-container" class="hidden">
+                            <div id="emoji-picker"></div>
+
                     </form>
                 </div>
                 <br>
@@ -70,6 +73,7 @@
     </div>
 
     <script src="scripts/code.js" type="module"></script>
+    <script src="https://unpkg.com/picmo@latest/dist/umd/index.js"></script>
 
 </body>
 

@@ -4,6 +4,7 @@ const formMessage = document.querySelector("#form-message");
 const formUsername = document.querySelector("#form-username");
 const userElement = document.querySelector("input#username");
 const chatSection = document.getElementById("chat-stage");
+const chat = document.querySelector("#chat");
 const usernameDiv = document.getElementById("username-div");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
@@ -12,11 +13,8 @@ const onlineUsersMainDiv = document.getElementById("online-users-main-div");
 const headerTitle = document.querySelector("h1");
 const divMainBox = document.querySelector(".div-main-box");
 const onlineUsersElement = document.getElementById("online-users");
-const alertDisplay = document.getElementById("alert-display");
 const canvas = document.querySelector("canvas");
 const logoutBtn = document.getElementById("logout-btn");
-
-
 
 // dependencies - WebSocket
 // const websocket = new WebSocket("ws://localhost:8555");
@@ -128,6 +126,24 @@ formUsername.addEventListener("submit", (e) => {
         })
 });
 
+window.addEventListener('DOMContentLoaded', () => {
+    const trigger = document.querySelector('#emoji-trigger');
+    const container = document.querySelector('#emoji-picker-container');
+
+    const picker = picmo.createPicker({
+        rootElement: document.querySelector('#emoji-picker')
+    });
+
+    trigger.addEventListener('click', () => {
+        container.classList.toggle('hidden');
+    });
+
+    picker.addEventListener('emoji:select', (selection) => {
+        msgElement.value += selection.emoji;
+        container.classList.add('hidden');
+        msgElement.focus();
+    })
+})
 
 
 formMessage.addEventListener("submit", (e) => {
@@ -148,6 +164,8 @@ formMessage.addEventListener("submit", (e) => {
     // för den som är inloggad
     renderChatMessage(obj);
 
+    chat.classList.remove("hidden");
+
     // för att andra ska se ett nytt meddelande skickas det via websockets
     websocket.send(JSON.stringify(obj));
 
@@ -157,14 +175,6 @@ formMessage.addEventListener("submit", (e) => {
     msgElement.focus();
 
 })
-
-
-// aktivera lyssnare på input#msg: kan användas för att visa att ngn skriver tex "...is typing"
-msgElement.addEventListener("keydown", (e) => {
-    // console.log("is typing", e.key);
-
-    // ...hanter att en person skriver ngt - kan kanske skickas som en händelse backend...
-});
 
 logoutBtn.addEventListener("click", logoutButton);
 
@@ -188,8 +198,6 @@ websocket.addEventListener("message", (e) => {
             break;
 
         case "new_user":
-            // console.log("uppdatera att följande användare är på plats...", obj.username)
-
             // visa en uppdaterad lista på aktuella användare som servern anser vara online
             console.log("Users:", obj.usersOnline)
             onlineUsersElement.innerHTML = obj.usersOnline.map(user => `
@@ -215,13 +223,6 @@ websocket.addEventListener("message", (e) => {
 
 });
 
-
-// canvas.addEventListener("dblclick", (e) => {
-//     // kordinater
-//     const point = {x: e.offsetX, y: e.offsetY};
-//     const radius = Math.ceil(Math.random() * 40);
-//     drawCircle(point, radius);
-// });
 
 // window.addEventListener("load", resizeCanvas);
 // window.addEventListener("resize", resizeCanvas);
@@ -370,9 +371,9 @@ function renderChatMessage(obj) {
     div.appendChild(time);
 
 
-    chatElement.appendChild(div);
+    chatElement.prepend(div);
     // chatElement.appendChild(p);
-
+    chatElement.scrollTop = 0;
 }
 
 // function resizeCanvas() {
@@ -383,19 +384,6 @@ function renderChatMessage(obj) {
 // }
 
 // resizeCanvas();
-
-// /**
-//  * 
-//  * @param {Object} point 
-//  * @param {Number} radius 
-//  */
-// function drawCircle(point, radius) {
-//     ctx.beginPath();
-//     ctx.arc(point.x, point.y, radius, 0, Math.PI * 2, true);
-//     ctx.fillStyle = "yellow"
-//     ctx.fill();
-//     ctx.closePath();
-// }
 
 function drawLine(obj) {
 
