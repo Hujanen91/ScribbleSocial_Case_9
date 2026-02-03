@@ -15,6 +15,7 @@
 
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background: url(../assets/images/1qltq5uehmr71.png);
@@ -38,20 +39,44 @@ h1 {
     letter-spacing: 0.2rem;
 }
 
-.divMainBox {
+.divOuterBox {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 95%;
-    height: 60vh;
+    height: 80vh;
     background: var(--crimson-violet-opactiy-glass);
     box-shadow: 0 8px 30px 0 var(--crimson-violet);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 2px solid var(--crimson-violet-opacity);
     border-radius: 40px 0px 40px 0px;
-    margin: auto;
+    margin: 10px auto;
+}
+
+.divMainBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 95%;
+}
+
+.divMainBoxLoggedIn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* width: 95%;
+    height: 80vh; */
+    /* background: var(--crimson-violet-opactiy-glass);
+    box-shadow: 0 8px 30px 0 var(--crimson-violet);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 2px solid var(--crimson-violet-opacity);
+    border-radius: 40px 0px 40px 0px; */
+    /* margin: 10px auto; */
 }
 
 /* .loginCanvas {
@@ -63,6 +88,14 @@ h1 {
     width: 45%;
     align-items: center;
 } */
+
+.descriptionSection {
+    align-items: center;
+    text-align: center;
+    width: 80%;
+    color: var(--white-grey);
+    margin-bottom: 25px;
+}
 
 input {
     font-size: 14px;
@@ -194,8 +227,8 @@ li {
 canvas {
     /* display: block !important; */
     margin: 1px;
-    width: 95% !important;
-    height: 60vh !important;
+    /* width: 400px;
+    height: 300px; */
     max-height: 500px;
     border: 1px solid rgb(151, 151, 151);
     background-color: white;

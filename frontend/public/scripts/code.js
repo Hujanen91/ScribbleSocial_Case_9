@@ -7,24 +7,22 @@ const chatSection = document.getElementById("chatStage");
 const usernameDiv = document.getElementById("usernameDiv");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
-const welcomeUser = document.getElementById("welcomeUser");
-const userImgDiv = document.getElementById("userImgDiv");
+const descriptionElement = document.querySelector(".descriptionSection");
+const onlineUsersMainDiv = document.getElementById("onlineUsersMainDiv");
 const headerTitle = document.querySelector("h1");
+const divMainBox = document.querySelector(".divMainBox");
 const onlineUsersElement = document.getElementById("onlineUsers");
 const alertDisplay = document.getElementById("alertDisplay");
 const canvas = document.querySelector("canvas");
-const activeUser = document.getElementsByClassName("activeUsername");
 const logoutBtn = document.getElementById("logoutBtn");
 
-// rita 2d i canvas elementet
-// const ctx = canvas.getContext("2d");
 
 
 // dependencies - WebSocket
 // const websocket = new WebSocket("ws://localhost:8555");
-const serverIP = "192.168.0.2"; // BYT UT MOT DIN IP!
-const websocket = new WebSocket(`ws://${serverIP}:8555`);
-const endpoint = `http://${serverIP}:8555/login`;
+const host = window.location.hostname;
+const websocket = new WebSocket(`ws://${host}:8555`);
+const endpoint = `http://${host}:8555/login`;
 
 import Player from "./Player.js";
 
@@ -95,13 +93,18 @@ formUsername.addEventListener("submit", (e) => {
                 chatSection.classList.remove("hidden");
                 canvas.classList.remove("hidden");
                 logoutBtn.classList.remove("hidden");
-                userImgDiv.classList.remove("hidden");
+                onlineUsersMainDiv.classList.remove("hidden");
                 usernameDiv.classList.add("hidden");
                 headerTitle.classList.add("hidden");
+                descriptionElement.classList.add("hidden");
+                divMainBox.classList.remove("divMainBox");
+                divMainBox.classList.add("divMainBoxLoggedIn");
                 
-                resizeCanvas();
+                // resizeCanvas();
 
-                welcomeUser.textContent = data.username;
+                onlineUsersElement.textContent = data.username;
+                // rita 2d i canvas elementet
+                ctx = canvas.getContext("2d");
                 
 
                 // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
@@ -215,8 +218,8 @@ websocket.addEventListener("message", (e) => {
 //     drawCircle(point, radius);
 // });
 
-window.addEventListener("load", resizeCanvas);
-window.addEventListener("resize", resizeCanvas);
+// window.addEventListener("load", resizeCanvas);
+// window.addEventListener("resize", resizeCanvas);
 
 // lägg till händelselyssnare för att kunna rita i ett canvas-element
 canvas.addEventListener("mousedown", (e) => {
@@ -367,14 +370,14 @@ function renderChatMessage(obj) {
 
 }
 
-function resizeCanvas() {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+// function resizeCanvas() {
+//     canvas.width = canvas.clientWidth;
+//     canvas.height = canvas.clientHeight;
 
-    ctx = canvas.getContext("2d");
-}
+//     ctx = canvas.getContext("2d");
+// }
 
-resizeCanvas();
+// resizeCanvas();
 
 // /**
 //  * 
