@@ -1,20 +1,20 @@
 // DOM element
 // ------------------------------------------------------
-const formMessage = document.querySelector("#formMessage");
-const formUsername = document.querySelector("#formUsername");
+const formMessage = document.querySelector("#form-message");
+const formUsername = document.querySelector("#form-username");
 const userElement = document.querySelector("input#username");
-const chatSection = document.getElementById("chatStage");
-const usernameDiv = document.getElementById("usernameDiv");
+const chatSection = document.getElementById("chat-stage");
+const usernameDiv = document.getElementById("username-div");
 const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chat");
-const descriptionElement = document.querySelector(".descriptionSection");
-const onlineUsersMainDiv = document.getElementById("onlineUsersMainDiv");
+const descriptionElement = document.querySelector(".description-section");
+const onlineUsersMainDiv = document.getElementById("online-users-main-div");
 const headerTitle = document.querySelector("h1");
-const divMainBox = document.querySelector(".divMainBox");
-const onlineUsersElement = document.getElementById("onlineUsers");
-const alertDisplay = document.getElementById("alertDisplay");
+const divMainBox = document.querySelector(".div-main-box");
+const onlineUsersElement = document.getElementById("online-users");
+const alertDisplay = document.getElementById("alert-display");
 const canvas = document.querySelector("canvas");
-const logoutBtn = document.getElementById("logoutBtn");
+const logoutBtn = document.getElementById("logout-btn");
 
 
 
@@ -97,15 +97,15 @@ formUsername.addEventListener("submit", (e) => {
                 usernameDiv.classList.add("hidden");
                 headerTitle.classList.add("hidden");
                 descriptionElement.classList.add("hidden");
-                divMainBox.classList.remove("divMainBox");
-                divMainBox.classList.add("divMainBoxLoggedIn");
-                
+                divMainBox.classList.remove("div-main-box");
+                divMainBox.classList.add("div-main-box-logged-in");
+
                 // resizeCanvas();
 
                 onlineUsersElement.textContent = data.username;
                 // rita 2d i canvas elementet
                 ctx = canvas.getContext("2d");
-                
+
 
                 // Se till att chatt-input är redo att skrivas i direkt efter meddelande skickats:
                 msgElement.focus();
@@ -172,7 +172,6 @@ logoutBtn.addEventListener("click", logoutButton);
 websocket.addEventListener("message", (e) => {
 
     const data = e.data;
-
     // skicka och ta emot data, förusätt att det är i JSON-format
 
     const obj = JSON.parse(e.data);
@@ -192,7 +191,13 @@ websocket.addEventListener("message", (e) => {
             // console.log("uppdatera att följande användare är på plats...", obj.username)
 
             // visa en uppdaterad lista på aktuella användare som servern anser vara online
-            onlineUsersElement.innerHTML = obj.usersOnline.map(users => `<li>${users}</li>`).join("");
+            console.log("Users:", obj.usersOnline)
+            onlineUsersElement.innerHTML = obj.usersOnline.map(user => `
+                <li>
+                    ${user.username}
+                    <span class="online-dot" style="background-color:${user.color};"></span>
+                </li>
+            `).join("");
             break;
 
         case "user_left":
@@ -329,12 +334,12 @@ function renderChatMessage(obj) {
 
     let div = document.createElement("div");
     const p = document.createElement("p");
-    div.classList = "textMsg";
+    div.classList = "text-msg";
 
     // applicera klass på vem som skriver - jfr username === obj.username
 
     if (obj.username !== username) {
-        div.classList = "textMsg";
+        div.classList = "text-msg";
     } else {
         div.classList.add("other");
     }
@@ -415,7 +420,7 @@ function drawLine(obj) {
     }
     ctx.stroke();
     ctx.closePath();
-    
+
     ctx.fillText(obj.username, points[0].x, points[0].y);
     // ctx.font = "14px";
     // ctx_wrap.fillStyle(obj.color);

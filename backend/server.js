@@ -72,25 +72,38 @@ app.use(express.json());
 // ------------------------------------------------------
 app.post('/login', (req, res) => {
     let username = req.body.username;
-    console.log("username", username);
 
-    if (usersOnline.includes(username)) {
-        console.log("username already in use", username);
+    // 1. Kontrollera om användaren finns (nu i en array av objekt)
+    const userExists = usersOnline.find(u => u.username === username);
+
+    if (userExists) {
         return res.send({ authenticated: false, message: "Username is already in use" });
     }
 
     if (username.length <= 2 || username.length >= 10) {
-        // uppdatera listan med usersonline
-        // usersOnline.push(username);
-        console.log("users:", usersOnline);
         return res.send({ authenticated: false, message: "Username is too short or too long" });
-        
     }
-    usersOnline.push(username);
-    console.log("current users online:", usersOnline);
+    
+    // 2. Skapa färgen här
+    const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
 
-// skicka ett objekt:
-    res.send({ authenticated: true, username: username, id: nanoid() });
+    // 3. Spara som ett OBJEKT i arrayen
+    const newUser = { 
+        username: username, 
+        color: randomColor 
+    };
+    
+    usersOnline.push(newUser);
+    
+    console.log("Current users online objects:", usersOnline);
+
+    // 4. Skicka tillbaka färgen så att Player-klassen på klientsidan kan använda den
+    res.send({ 
+        authenticated: true, 
+        username: username, 
+        id: nanoid(),
+        color: randomColor 
+    });
 });
 
 
@@ -129,7 +142,7 @@ wss.on('connection', (ws) => {
         // användare
 
         // ta bort ett element från en array
-        usersOnline = usersOnline.filter(u => u !== ws.username);
+        usersOnline = usersOnline.filter(u => u.username !== ws.username);
         const obj = { type: "user_left", username: ws.username, usersOnline: usersOnline };
 
         broadcastExclude(wss, ws, obj);
@@ -162,13 +175,23 @@ wss.on('connection', (ws) => {
 
             case "new_user":
 
+                const userData = {
+                    username: obj.username,
+                    color: obj.player.color
+                }
+
+                if (!usersOnline.find(u => u.username === obj.username)) {
+                    usersOnline.push(userData);
+                }
+
+                ws.username = obj.username;
                 // uppdatera listan usersOnline med användaren
                 obj.usersOnline = usersOnline;
 
                 // en variant som funkar i js
                 // lägg till en egenskap till det objekt som nu har koll på klientkopplingen
                 // inte best practise, se över andra lösningar senare
-                ws.username = obj.username;
+                
 
                 // här kan man ex lägga till extra egenskaper i objektet
                 // if (!obj.hasOwnProperty("usersOnline")) {

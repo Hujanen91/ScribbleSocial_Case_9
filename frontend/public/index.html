@@ -16,18 +16,18 @@
 </head>
 
 <body>
-    <div class="divOuterBox">
-        <div id="onlineUsersMainDiv" class="hidden">
-            <h3>Online:</h3>
-            <div id="onlineUsersDiv">
-                <ul id="onlineUsers">
+    <div class="div-outer-box">
+        <h3>Online:</h3>
+        <div id="online-users-main-div" class="hidden">
+
+            <div id="online-users-div">
+                <ul id="online-users">
                 </ul>
             </div>
         </div>
-        <div class="divMainBox">
-            <!-- <section class="loginCanvas"> -->
+        <div class="div-main-box">
             <h1>ScribbleSocial</h1>
-            <section class="descriptionSection">
+            <section class="description-section">
                 <p>Where conversation meets creativity!</p>
                 <p>ScribbleSocial lets you chat with friends while sharing a live canvas because some things are better
                     drawn than said.</p>
@@ -36,23 +36,23 @@
             <canvas class="hidden" width="700" height="400"></canvas>
 
 
-            <div id="usernameDiv">
+            <div id="username-div">
                 <!-- formulär som anger vem man är... -->
-                <form id="formUsername" action="">
+                <form id="form-username" action="">
                     <input type="text" name="username" id="username" placeholder="Username" required minlength="3"
                         maxlength="10">
-                    <input id="loginBtn" type="submit" value="Start talking!">
+                    <input id="login-btn" type="submit" value="Start talking!">
                 </form>
-                <p id="alertDisplay"></p>
+                <p id="alert-display"></p>
             </div>
             <!-- </section> -->
 
 
 
-            <section class="hidden" id="chatStage">
-                <div class="chatInputDiv">
+            <section class="hidden" id="chat-stage">
+                <div class="chat-input-div">
                     <!-- formulär för att skriva meddelande... -->
-                    <form id="formMessage" action="">
+                    <form id="form-message" action="">
                         <input type="text" name="msg" id="msg" placeholder="Say something!" required>
                         <input type="submit" value="Send">
                     </form>
@@ -66,7 +66,7 @@
                 </div>
             </section>
         </div>
-        <input type="submit" value="Leave chatroom" id="logoutBtn" class="hidden">
+        <input type="submit" value="Leave chatroom" id="logout-btn" class="hidden">
     </div>
 
     <script src="scripts/code.js" type="module"></script>
