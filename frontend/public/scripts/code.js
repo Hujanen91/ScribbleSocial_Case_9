@@ -17,14 +17,14 @@ const canvas = document.querySelector("canvas");
 const logoutBtn = document.getElementById("logout-btn");
 
 // dependencies - WebSocket - Lokalt:
-// const host = window.location.hostname;
-// const websocket = new WebSocket(`ws://${host}:8555`);
-// const endpoint = `http://${host}:8555/login`;
+const host = window.location.hostname;
+const websocket = new WebSocket(`ws://${host}:8555`);
+const endpoint = `http://${host}:8555/login`;
 
 // dependencies - deploy public:
-const backendHost = "scribblesocial-case-9.onrender.com";
-const websocket = new WebSocket(`wss://${backendHost}`);
-const endpoint = `https://${backendHost}/login`;
+// const backendHost = "scribblesocial-case-9.onrender.com";
+// const websocket = new WebSocket(`wss://${backendHost}`);
+// const endpoint = `https://${backendHost}/login`;
 
 
 import Player from "./Player.js";

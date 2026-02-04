@@ -87,7 +87,7 @@ wss.on('connection', (ws) => {
     // console.log(`New user connected, users online: ${wss.clients.size}`);
 
     // skicka meddelande till samtliga klienter om att en ny användare finns samt alla aktiva användare
-    // const obj = { type: "new_client", msg: "New user has connected", usersOnline: usersOnline };
+    const obj = { type: "new_client", msg: "New user has connected", usersOnline: usersOnline };
     broadcast(wss, obj);
 
     ws.username
