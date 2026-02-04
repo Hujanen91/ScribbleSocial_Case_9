@@ -64,7 +64,6 @@ formUsername.addEventListener("submit", (e) => {
         .then(res => res.json())
         .then((data) => {
 
-            console.log("data", data);
 
             if (data.authenticated === true) {
                 authenticated = true;
@@ -73,7 +72,7 @@ formUsername.addEventListener("submit", (e) => {
                 // instansiera en ny "player"
                 player = new Player(data.id, data.username, data.color);
 
-                console.log("authenticated", authenticated, "username", username);
+                // console.log("authenticated", authenticated, "username", username);
 
                 userElement.setAttribute("disabled", true);
                 chatSection.classList.remove("hidden");
@@ -158,10 +157,8 @@ logoutBtn.addEventListener("click", logoutButton);
 websocket.addEventListener("message", (e) => {
 
     const data = e.data;
-    // skicka och ta emot data, förusätt att det är i JSON-format
 
     const obj = JSON.parse(e.data);
-    console.log("obj", obj);
 
     switch (obj.type) {
 
@@ -173,8 +170,6 @@ websocket.addEventListener("message", (e) => {
             break;
 
         case "new_user":
-            // visa en uppdaterad lista på aktuella användare som servern anser vara online
-            console.log("Users:", obj.usersOnline)
             onlineUsersElement.innerHTML = obj.usersOnline.map(user => `
                 <li>
                     ${user.username}
@@ -194,7 +189,6 @@ websocket.addEventListener("message", (e) => {
 
         case "draw":
 
-            // anropa en funktion
             drawLine(obj);
 
             break;
@@ -219,7 +213,6 @@ canvas.addEventListener("mousedown", (e) => {
     player.drawStart(canvas, ctx, point);
 
     points = [];
-    // buffra koordinat (point)
     points.push(point);
 });
 
@@ -239,7 +232,6 @@ canvas.addEventListener("touchmove", (e) => {
     player.drawStart(canvas, ctx, point);
 
     points = [];
-    // buffra koordinat (point)
     points.push(point);
 });
 
@@ -268,9 +260,9 @@ canvas.addEventListener("mouseup", (e) => {
     // HÄR SKER MAGIN: Vi paketerar points OCH färg i ett objekt
     const drawingData = {
         type: "draw",
-        points: points,       // Arrayen med alla punkter från mousedown till mouseup
-        color: player.color,  // Ser till att obj.color inte blir undefined på servern
-        username: player.username // Valfritt: bra för att veta vem som ritat
+        points: points,
+        color: player.color,
+        username: player.username
     };
 
     // sänd buffrade koordinater via websocket
@@ -320,7 +312,7 @@ function renderChatMessage(obj) {
     const time = document.createElement("time");
 
     // vad har obj.date för datatyp
-    console.log("Datatyp:", typeof obj.date);
+    // console.log("Datatyp:", typeof obj.date);
 
     // datumobjekt för att kunna välja ut en viss del
     const date = new Date(obj.date);
@@ -340,7 +332,6 @@ function drawLine(obj) {
     const points = obj.points;
 
     if (!points || points.length < 2) return;
-    console.log("Ritar linje med färg:", obj.color, "Första punkt:", points[0]);
     if (!ctx) ctx = canvas.getContext("2d");
 
     ctx.beginPath();
@@ -348,7 +339,6 @@ function drawLine(obj) {
     ctx.lineWidth = 5;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-
 
     ctx.moveTo(points[0].x, points[0].y);
 
@@ -358,8 +348,6 @@ function drawLine(obj) {
     }
     ctx.stroke();
     ctx.closePath();
-
-    // ctx.fillText(obj.username, points[0].x, points[0].y);
 }
 
 function refreshPage() {

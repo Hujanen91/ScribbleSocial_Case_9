@@ -1,12 +1,9 @@
 // dependencies
 // ------------------------------------------------------
-// en minimal express server applikation
-// http är en inbyggd dependencie, det behöver alltså inte installeras innan vi importerar 
 import express from 'express';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 import { nanoid } from 'nanoid';
-// ------------------------------------------------------
 // en korrigering för path, ett robust sätt att se till att våran server.js använder en 
 // absolut sökväg. Vi meddelar node exakt vart filerna finns oavsett vart vi startar servern från
 import path from 'path';
@@ -23,41 +20,20 @@ const __dirname = path.dirname(__filename);
 // ------------------------------------------------------
 const app = express();
 
-// enge en mapp som express kan använda för att skicka filer automatiskt utan routes
-// app.use(express.static('../frontend/public'))
 // kombinera "join" hämtning och extrahering av url och dir-name:
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 
-// definera/ange våran port
 const port = 8555;
-
-// skapa en http server, express skickas med som en instans
 const server = http.createServer(app);
 
-// skapa en websocket server
 const wss = new WebSocketServer({ noServer: true });
 
-// handskaningen - godkänn kommunikation via websocket
 server.on("upgrade", (req, socket, head) => {
 
-    console.log("event upgrade...")
-
-    // bestäm vem som får kommunicera med websocket
-    // ex, kolla om man är inloggad
-    // if (!authenticated) return
-
     wss.handleUpgrade(req, socket, head, (ws) => {
-
-        console.log("Client:", req.headers['user-agent']);
-
-        // kommunikation on, skicka vidare event med 'emit'
-        // använd händelselyssnare senare i koden
         wss.emit("connection", ws, req);
-
     });
 });
-
-
 // array för aktiva användarnamnet
 let usersOnline = [];
 
@@ -73,13 +49,11 @@ app.use(express.json());
 app.post('/login', (req, res) => {
     let username = req.body.username;
 
-    // 1. Kontrollera om användaren finns (nu i en array av objekt)
     const userExists = usersOnline.find(u => u.username === username);
 
     if (userExists) {
         return res.send({ authenticated: false, message: "Username is already in use" });
     }
-
     if (username.length <= 2 || username.length >= 10) {
         return res.send({ authenticated: false, message: "Username is too short or too long" });
     }
@@ -94,8 +68,6 @@ app.post('/login', (req, res) => {
     };
     
     usersOnline.push(newUser);
-    
-    console.log("Current users online objects:", usersOnline);
 
     // 4. Skicka tillbaka färgen så att Player-klassen på klientsidan kan använda den
     res.send({ 
@@ -112,34 +84,17 @@ app.post('/login', (req, res) => {
 wss.on('connection', (ws) => {
 
     // info om klienter som autentiseras - websocket kommunikation ok
-    console.log(`New user connected, users online: ${wss.clients.size}`);
-
-    // skicka meddelande till browser-land
-    // skicka och ta emot data, förusätt att det är i JSON-format
+    // console.log(`New user connected, users online: ${wss.clients.size}`);
 
     // skicka meddelande till samtliga klienter om att en ny användare finns samt alla aktiva användare
-    const obj = { type: "new_client", msg: "New user has connected", usersOnline: usersOnline };
+    // const obj = { type: "new_client", msg: "New user has connected", usersOnline: usersOnline };
     broadcast(wss, obj);
 
     ws.username
 
-    // lyssna på event när en klient lämnar kommunikationen
     ws.on('close', () => {
         // skicka aktuell lista på aktiva användare till klienterna
-        console.log(`User left, users online: ${wss.clients.size}`);
-
-        // ev skicka info till klienter om att en klient inte längre är med...
-
-        // Uppdatera listan usersOnline så att vi vet att en specifik användare är kopplad
-        // till just den här klienten, dvs "ws"
-        // ta bort accosierad användare
-        // ws.username vs array usersOnline
-        console.log(ws.username, "vs", usersOnline);
-
-
-
-        // skicka websocketmeddelande om vem som droppade, samt uppdatera på aktuella
-        // användare
+        // console.log(`User left, users online: ${wss.clients.size}`);
 
         // ta bort ett element från en array
         usersOnline = usersOnline.filter(u => u.username !== ws.username);
@@ -149,23 +104,14 @@ wss.on('connection', (ws) => {
 
     });
 
-
     // lyssna på event av sorten "message"
     ws.on('message', (data) => {
 
         const obj = JSON.parse(data);
-        console.log(obj);
-
-        // ev om behov finns, kontrollera obj.type för att avgöra hur
-        // servern hanterar inkommande meddelande
 
         switch (obj.type) {
 
             case "text":
-                // broadcast(wss. obj);
-                // för att visa aktuell tid för ett textmeddelande kan man
-                // lägga till egenskapen på serversidan
-                // då kan tidszoner implementeras om clienter skriver från olika delar i världen
                 const date = new Date();
 
                 obj.date = date;
@@ -179,26 +125,13 @@ wss.on('connection', (ws) => {
                     username: obj.username,
                     color: obj.player.color
                 }
-
                 if (!usersOnline.find(u => u.username === obj.username)) {
                     usersOnline.push(userData);
                 }
 
                 ws.username = obj.username;
-                // uppdatera listan usersOnline med användaren
                 obj.usersOnline = usersOnline;
 
-                // en variant som funkar i js
-                // lägg till en egenskap till det objekt som nu har koll på klientkopplingen
-                // inte best practise, se över andra lösningar senare
-                
-
-                // här kan man ex lägga till extra egenskaper i objektet
-                // if (!obj.hasOwnProperty("usersOnline")) {
-                //     obj.usersOnline = usersOnline;
-                // }
-
-                // broadcastExclude(wss, ws, obj);
                 broadcast(wss, obj);
                 break;
 
