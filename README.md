@@ -3,6 +3,8 @@ Case 9 Websocket Canvas
 
 En plattform för gruppchatt med en anslagstavla där användarna kan rita medans dom pratar.
 
+Hemsidan finns publicerad på Netlify: <br>
+[ScribbleSocial](https://scribblesocial.netlify.app/) 
 
 ## Innehållsförteckning
 * [Om projektet](#om-projektet)
