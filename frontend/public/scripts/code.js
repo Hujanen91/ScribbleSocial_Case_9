@@ -359,7 +359,7 @@ function drawLine(obj) {
     ctx.stroke();
     ctx.closePath();
 
-    ctx.fillText(obj.username, points[0].x, points[0].y);
+    // ctx.fillText(obj.username, points[0].x, points[0].y);
 }
 
 function refreshPage() {
