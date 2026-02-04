@@ -18,9 +18,9 @@ const logoutBtn = document.getElementById("logout-btn");
 
 // dependencies - WebSocket
 // const websocket = new WebSocket("ws://localhost:8555");
-const host = window.location.hostname;
-const websocket = new WebSocket(`ws://${host}:8555`);
-const endpoint = `http://${host}:8555/login`;
+const host = "https://scribblesocial.netlify.app/";
+const websocket = new WebSocket(`wss://${host}`);
+const endpoint = `https://${host}/login`;
 
 import Player from "./Player.js";
 
