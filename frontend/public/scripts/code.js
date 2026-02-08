@@ -251,6 +251,18 @@ websocket.addEventListener("message", (e) => {
 
 
 // lägg till händelselyssnare för att kunna rita i ett canvas-element
+// "mousedown" lyssnar på när någon håller ner musknappen
+// hämta en position relativ till klientens viewport, vi räknar alltså ut
+// musens position relativ till canvasens nollpunkt (uppe i vänster hörn)
+// 
+// vi ser till att se över så att användaren är inloggad innan vi tillåter interaktion
+// ställ in isDrawing till att va true
+// vi skickar med canvas, ctx och point argumenten för att ge player-instansen direkt tillgång
+// till rätt rityta och vart den ska börja.
+// 
+// sätt en tom array för points och pusha point till points arrayen, detta för att 
+// minska på hur många hämtningar live man ska köra för att inte överbelasta servern, 
+// istället skickas en array med den mängd points en klient ritade när dom väl släpper på musknappen
 canvas.addEventListener("mousedown", (e) => {
     const rect = canvas.getBoundingClientRect();
     const point = {
@@ -268,6 +280,7 @@ canvas.addEventListener("mousedown", (e) => {
     points.push(point);
 });
 
+// -----------------------------------------------------------------------
 // En början till att göra mobil användning möjlig, inte klar än dock
 // canvas.addEventListener("touchmove", (e) => {
 //     e.preventDefault();
@@ -287,7 +300,18 @@ canvas.addEventListener("mousedown", (e) => {
 //     points = [];
 //     points.push(point);
 // });
+// -----------------------------------------------------------------------
 
+
+// Vi sätter en eventlistener vid musrörelse, 
+// om klienten inte ritar eller om det inte finns en klient/spelare så tillåter vi ingen interaktion
+// 
+// som ovan hämtar vi musens position relativ till canvasens nollpunkt med våran const rect och const point
+//
+// vi skickar med canvas, ctx och point för att ge player-instansen tillgång till rätt
+// rityta och var den ska börja
+// 
+// Vi buffrar tillsist koordinater (points) och skickar dom klumpvis med ws
 canvas.addEventListener("mousemove", (e) => {
     if (!isDrawing) { return };
     if (!player) { return };
@@ -300,10 +324,20 @@ canvas.addEventListener("mousemove", (e) => {
 
     player.draw(canvas, ctx, point);
 
-    // buffra kordinater (points) och skicka klumpvis med ws
     points.push(point);
 });
 
+// Sätt en evenlistener som lyssnar på när man släpper musknappen
+// 
+// om klienten inte är inloggad tillåter vi ingen interaktion
+// vi sätter isDrawing till false vid mouseup
+// 
+// Vi buntar sedan ihop points och färg i ett objekt för att
+// kunna skicka med datan när användaren ritar, detta för att koppla
+// och få ut rätt färg till rätt användare
+// 
+// Vi skickar buffrade koordinater via ws
+// och rensar sedan tidigare koordinater med points = [];
 canvas.addEventListener("mouseup", (e) => {
 
     if (!player) { return }
@@ -318,13 +352,9 @@ canvas.addEventListener("mouseup", (e) => {
         username: player.username
     };
 
-    // sänd buffrade koordinater via websocket
     websocket.send(JSON.stringify(drawingData));
-
-    // ta bort alla tidigare koordinater
     points = [];
 })
-
 
 
 
@@ -335,9 +365,33 @@ canvas.addEventListener("mouseup", (e) => {
  * @param {Object} obj 
  * @param {string} obj.username
  * @param {string} obj.msg
- * @param {Date} obj.date - Date 
+ * @param {Date} obj.date
  */
-
+// Funktion som rendererar chattmeddelanden
+// skapar två element, div och p och ger diven en class "text-msg"
+// om objectet username inte är lika med det aktiva username
+// ska classlist vara "text-msg", annars ska "other" läggas till
+// detta för att styla aktiv user annorlunga från andra inloggade klienter
+// så man i chatten tydligt kan se vilka meddelanden som är ens egna
+// vi sätter textContent till vårat objects msg input och sätter class "text"
+// Skapar sedan en div kopplad till divUsername och sätter textContent
+// till vårat objects username, aktiva användarnamnet för inloggad klient
+// sedan sätter vi en class "username"
+// vi skickar sedan divUsername och våran p till DOM:en så det kan visas för
+// användaren.
+// Vi deklarerar en variabel för time och skapar ett tomt element "time"
+// Vi deklarerar sedan en variabel för date och tilldelar den värdet
+// new Date och hämtar in datan date från vårat object
+// Vidare sätter vi in datan från våran date i våran time variabel och 
+// gör om dom till local date strings för bättre läsbarhet
+// vi skickar sedan vårat element med datan till våran div med appendChild
+// 
+// Vi skickar sedan ut vårat element med datan till DOM:en för användning på klientsidan
+// Med prepand istället för appendChild så skickar vi div-elementet så det
+// lägger sig allra först i föräldraelementet, detta för att nya chattmeddelanden ska synas längst upp i chattfönstret
+// för bra UX
+// scrollTop tvingar webbläsaren att hoppa direkt till toppen av chatElement så den inte hoppar
+// längst ner vid varje nytt meddelande.
 function renderChatMessage(obj) {
 
     let div = document.createElement("div");
@@ -361,16 +415,13 @@ function renderChatMessage(obj) {
     div.appendChild(divUsername);
     div.appendChild(p);
 
-    // aktuell tid
     const time = document.createElement("time");
 
     // vad har obj.date för datatyp
     // console.log("Datatyp:", typeof obj.date);
 
-    // datumobjekt för att kunna välja ut en viss del
     const date = new Date(obj.date);
 
-    // visa tid som hh:mm:ss
     time.textContent = date.toLocaleTimeString();
     time.dateTime = date.toLocaleTimeString();
     div.appendChild(time);
@@ -379,7 +430,22 @@ function renderChatMessage(obj) {
     chatElement.scrollTop = 0;
 }
 
-
+/**
+ *
+ *
+ * @param {Object} obj
+ * @param {Array} obj.points
+ * @param {string} obj.color
+ */
+// Vi hämtar ut punkter från objektet
+// Sätter en koll som ser över att minst två punkter behövs för att kunna dra ett streck
+// Och en koll som ser över att vi har tillgång till ritytans context (ctx)
+// Vi sätter sedan pennan/linjernas utseende
+// Flyttar sedan pennan till den första startpunken
+// 
+// Loopar sedan genom resten av punkterna och drar osynliga linjer mellan dom.
+// Vi målar sedan ut linjerna som definerats innan på våran canvas med ctx.stroke();
+// Avslutar sedan ritvägen med ctx.closePatch();
 function drawLine(obj) {
 
     const points = obj.points;
@@ -403,6 +469,7 @@ function drawLine(obj) {
     ctx.closePath();
 }
 
+// Laddar om hela webbsidan, används för att logga ut användaren
 function refreshPage() {
     window.location.reload();
 }
