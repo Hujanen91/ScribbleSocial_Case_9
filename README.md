@@ -58,9 +58,17 @@ npm install
 ```
 ## 5. Konfigurera anslutning
 Öppna code.js och kontrollera att anslutningen är inställd för lokal utveckling:
+Se till att kommentera in koden för Lokal utveckling från rad 24 till rad 26 i code.js:
+
+```
+const host = window.location.hostname;
+const websocket = new WebSocket(`ws://${host}:8555`);
+const endpoint = `http://${host}:8555/login`;
+```
 
 ``Variabeln host ska använda window.location.hostname.`` <br>
 ``Porten ska vara 8555.``
+
 
 ## 6. Startar servern med automatisk omstart vid ändringar (rekommenderas)
 ```

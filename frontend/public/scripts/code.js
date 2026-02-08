@@ -21,16 +21,16 @@ const logoutBtn = document.getElementById("logout-btn");
 
 // dependencies - WebSocket - Lokalt:
 // Lokalt (Development) - Används när koden ska köras lokalt på vår egen dator (localhost)
-const host = window.location.hostname;
-const websocket = new WebSocket(`ws://${host}:8555`);
-const endpoint = `http://${host}:8555/login`;
+// const host = window.location.hostname;
+// const websocket = new WebSocket(`ws://${host}:8555`);
+// const endpoint = `http://${host}:8555/login`;
 
 // dependencies - deploy public:
 // Publikt (Production) - Kommenteras ut och används när koden är klar och ska pushas och
 // användas publikt.
-// const backendHost = "scribblesocial-case-9.onrender.com";
-// const websocket = new WebSocket(`wss://${backendHost}`);
-// const endpoint = `https://${backendHost}/login`;
+const backendHost = "scribblesocial-case-9.onrender.com";
+const websocket = new WebSocket(`wss://${backendHost}`);
+const endpoint = `https://${backendHost}/login`;
 
 import Player from "./Player.js";
 
