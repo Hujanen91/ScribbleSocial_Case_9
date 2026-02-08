@@ -58,7 +58,8 @@ npm install
 ```
 ## 5. Konfigurera anslutning
 Öppna code.js och kontrollera att anslutningen är inställd för lokal utveckling:
-Se till att kommentera in koden för Lokal utveckling från rad 24 till rad 26 i code.js:
+Se till att kommentera in koden för Lokal utveckling från rad 24 till rad 26 i code.js
+och kommentera ut koden för public deployment för att kunna köra koden lokalt:
 
 ```
 const host = window.location.hostname;
