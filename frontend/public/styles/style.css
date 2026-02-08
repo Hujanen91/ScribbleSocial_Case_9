@@ -79,6 +79,12 @@ h1 {
     margin: 0 auto 25px auto;
 }
 
+#alert-display {
+    color: rgb(182, 148, 15);
+    background-color: var(--crimson-violet-opacity);
+    padding: 10px;
+}
+
 input {
     border-radius: 5px;
     font-size: 14px;

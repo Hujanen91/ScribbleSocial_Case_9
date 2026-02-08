@@ -34,6 +34,7 @@ server.on("upgrade", (req, socket, head) => {
         wss.emit("connection", ws, req);
     });
 });
+
 // array för aktiva användarnamnet
 let usersOnline = [];
 
@@ -58,10 +59,10 @@ app.post('/login', (req, res) => {
         return res.send({ authenticated: false, message: "Username is too short or too long" });
     }
     
-    // 2. Skapa färgen här
+    // Skapar en random färg att ge till varje ny användare
     const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
 
-    // 3. Spara som ett OBJEKT i arrayen
+    // Spara som ett object i arrayen
     const newUser = { 
         username: username, 
         color: randomColor 
@@ -69,7 +70,7 @@ app.post('/login', (req, res) => {
     
     usersOnline.push(newUser);
 
-    // 4. Skicka tillbaka färgen så att Player-klassen på klientsidan kan använda den
+    // Skicka tillbaka färgen så att Player-klassen på klientsidan kan använda den
     res.send({ 
         authenticated: true, 
         username: username, 

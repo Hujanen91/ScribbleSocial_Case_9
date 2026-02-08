@@ -1,4 +1,8 @@
 # ScribbleSocial
+<a name="top"></a>
+<a name="om-projektet"></a>
+## Om projektet
+
 Case 9 Websocket Canvas
 
 En plattform för gruppchatt med en anslagstavla där användarna kan rita medans dom pratar.
@@ -11,34 +15,94 @@ Hemsidan finns publicerad på Netlify: <br>
 * [Tekniker](#tekniker)
 * [Installation](#installation)
 * [Användning](#användning)
-* [Design](#design)
+* [Mockup](#mockup)
 * [Screenshots](#screenshots)
 * [AI-Användning](#ai-användning)
 
 ---
 
-<a name="om-projektet"></a>
-## Om projektet
 
 <a name="tekniker"></a>
-## Tekniker
-Lista de verktyg och språk du använt:
-* **Frontend:** HTML5, CSS3, JavaScript (ES6)
-* **Backend:** Node.js, WebSocket (WS)
-* **Verktyg:** DevTools, Render och Netlify (för deployment)
+## Teknisk Stack & Verktyg
+* <b>Backend:</b> Node.js, Express, ws (WebSockets)
+* <b>Frontend:</b> HTML5, Canvas, Vanilla JavaScript
+* <b>Pakethantering:</b> npm
+* <b>Utveckling:</b> nodemon (för att slippa starta om servern manuellt)
 
 <a name="installation"></a>
 ## Installation
-Steg-för-steg instruktioner om hur man får projektet att köra lokalt:
+Steg-för-steg instruktioner om hur du får igång projektet lokalt:
+
+### 1. Installera Node.js
+Du behöver ha Node.js installerat. För att se om du redan har det, öppna din terminal och skriv:
+```bash
+node -v
+```
+Får du inte fram ett versionsnummer behöver du gå till [nodejs.org](https://nodejs.org/en) och installera det.
+
+## 2. Klona projektet
+[https://github.com/Hujanen91/ScribbleSocial_Case_9.git](https://github.com/Hujanen91/ScribbleSocial_Case_9.git)
+```
+git clone https://github.com/Hujanen91/ScribbleSocial_Case_9.git
+```
+
+## 3. Gå in i mappen
+
+```
+cd ScribbleSocial_Case_9
+```
+
+## 4. Installera dependencies
+```
+npm install
+```
+## 5. Konfigurera anslutning
+Öppna code.js och kontrollera att anslutningen är inställd för lokal utveckling:
+
+``Variabeln host ska använda window.location.hostname.`` <br>
+``Porten ska vara 8555.``
+
+## 6. Startar servern med automatisk omstart vid ändringar (rekommenderas)
+```
+npm run dev
+```
+
+## 5. Testa appen
+Öppna webbläsaren på: http://localhost:8555
+
+Välj ett användarnamn och logga in.
+
+Öppna ett extra fönster (eller inkognitoläge) för att se hur chatten och ritandet syns hos båda samtidigt!
 
 <a name="användning"></a>
+Appen är designad för att vara enkel och interaktiv. Här är flödet:
 
-<a name="design"></a>
+* <b>Logga in:</b> När du startar appen möts du av en inloggningssida. Skriv in ditt önskade användarnamn. Systemet kontrollerar via ett API-anrop (POST /login) att namnet är ledigt.
+
+* <b>Tilldelning av färg:</b> Vid inloggning tilldelas du automatiskt en unik färg och ett unikt ID (via nanoid).
+
+* <b>Live Canvas:</b> Du kan nu rita på den gemensamma ytan. Allt du ritar skickas som koordinater via WebSockets till alla andra anslutna användare i realtid.
+
+* <b>Livechatt:</b> Använd chattfönstret för att skriva med andra. Dina meddelanden dyker upp direkt hos alla som är online.
+
+* <b>Aktiva användare:</b> Du kan se vilka andra som är inloggade just nu i listan för aktiva användare.
+
+* <b>Logga ut:</b> Klicka på logout-knappen för att rensa din session och återgå till startskärmen.
+
+<a name="mockup"></a>
+## Mockup:
+<img src="./frontend/public/assets/mockup/Skärmbild 2026-02-08 090813.png" alt="App Logo" width="1000">
 
 <a name="screenshots"></a>
+<img src="./frontend/public/assets/screenshots/Skärmbild 2026-02-08 090347.png" alt="App Logo" width="1000">
+<img src="./frontend/public/assets/screenshots/Skärmbild 2026-02-08 090503.png" alt="App Logo" width="1000">
+<img src="./frontend/public/assets/screenshots/Skärmbild 2026-02-08 090512.png" alt="App Logo" width="1000">
+<img src="./frontend/public/assets/screenshots/Skärmbild 2026-02-08 090550.png" alt="App Logo" width="1000">
 
+---
 <a name="ai-användning"></a>
-## AI dokumentering:
+<details>
+<summary style="font-size: 20px; font-weight: 600">AI dokumentering: </summary>
 
 Främst har AI använts vid felsökning när jag fått errors och inte riktigt förstår vart jag ska leta eller hur jag ska försöka korrigera felet.
 Jag bollar även frågor när jag vill definera olika kodsnuttar eller hur jag bör tänka i olika delar av koden medans jag kodat.
@@ -76,3 +140,8 @@ Efter korringering av canvas-rutan har nu linjen spelaren spelar med försvunnit
 **Lösning:**
 Jag hade dels glömt definera i Player.js under drawstart vad jag ville ha för settings på ctx så dessa skickades inte med som dom skulle. Jag hade även missat att kalla på funktionen som anpassade canvasrutan efter skärmens storlek inne i min submit när en användare loggar in, pga detta blev förmodligen canvasrutan inte i rätt storlek och jag ritade inte på "rätt ställe". 
 När funktionen kallades in direkt efter jag plockat bort "hidden" på canvas-elementet så fungerade det att rita.
+</details>
+
+---
+
+[Tillbaka till toppen](#top)
